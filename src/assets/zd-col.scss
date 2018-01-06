@@ -1,0 +1,706 @@
+@charset 'utf-8';
+/*
+    github:
+    https://github.com/ZongDuCha/ZD-1.0
+    http://www.zongdusir.top/
+    Email:1367243169@qq.com
+    qq:1367243169
+*/
+@mixin bor($px,$line,$color){
+    border: $px $line $color;
+}
+
+@mixin sizing($name:border-box){
+    -webkit-box-sizing: $name;
+            box-sizing: $name;
+}
+
+@mixin clearFloat(){
+    position: relative;
+
+    &:after{
+        content: '';
+        clear: both;
+        display: block;
+    }
+    &:before{
+        content: '';
+        clear: both;
+        display: block;
+    }
+}
+
+@mixin box-shadow($v1,$v2,$v3,$color){
+    -webkit-box-shadow:$v1 $v2 $v3 $color;
+            box-shadow:$v1 $v2 $v3 $color;
+}
+
+@mixin round($bool:false,$rods:5px,$rod1:5px,$rod2:5px,$rod3:5px,$rod4:5px){
+    @if $bool{
+        border-radius: $rods;
+    }
+    @else{
+        border-radius:$rod1,$rod2,$rod3,$rod4;
+    }
+}
+
+
+@mixin careat($borWidth:10px,$style:solid,$borColor1:transparent,$borColor2:transparent,$borColor3:transparent,$borColor4:transparent,$bool:false,$aftTop:-10px,$aftLeft:-10px){
+    border-width: $borWidth;
+    border-style: $style;
+    border-color: $borColor1 $borColor2 $borColor3 $borColor4;
+
+    @if $bool{
+        &:after{
+            top: $aftTop;
+            content: '';border-width: $borWidth;
+            height:0;
+            position:absolute;
+            right:-$borWidth;
+            width:0;border-style:solid;
+            bottom:-$borWidth;
+            left: $aftLeft;
+        }
+    }
+    
+}
+
+$color:#1d6de2;
+$zd-md:1200px;
+$zd-sm:990px;
+$zd-xs:770px;
+
+// ----------------------
+
+
+*{
+    padding:0;margin:0;
+    -webkit-font-smoothing:antialiased;
+}
+p,a,li,ul,ol,dd,dt,div,h1,h2,h3,h4,h5{
+    display: block;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    color:#000;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+    @include clearFloat();
+}
+[class*=careat]{
+    height: 0;
+    position: relative;
+    width: 0;
+}
+.container-fluid{
+    width: 100%;
+    margin-bottom: 8px;
+}
+.container{
+    height:auto;
+    position:relative;display:block;
+    width: 1200px;margin:0 auto;margin-bottom: 10px;
+    @include clearFloat();
+}
+
+[class*=zd-md-],[class*=zd-sm-],[class*=zd-xs-]{
+    position: relative;
+    margin-bottom: 10px;
+    float: left;
+    @include sizing();
+    padding-left: 5px;padding-right: 5px;
+    min-height: 1px;
+}
+
+.rnd{
+    @include round(true,50%)
+}
+
+[class*=zd-md-]{
+    display: inline-block;
+}
+
+@media (max-width:$zd-md) and (max-width:$zd-sm) and (max-width:$zd-xs){
+    .container{
+        width: 99%;
+    }
+} 
+
+
+@for $i from 5 through 1 {
+    h#{$i}{
+        font-size: (6-$i) * 10px;
+    }
+
+    .rnd-#{$i}{
+        border-radius: $i * 5px;
+    }
+}
+
+
+// zd-md-*,zd-smLeft-*,zd-smRight-*
+@for $i from 1 through 12{
+    .zd-md-#{$i}{
+        width: $i/12 * 100%;
+    }
+    .zd-mdLeft-#{$i}{
+        margin-left:$i/12 *100%;
+    }
+    .zd-mdRight-#{$i}{
+        margin-right: $i/12*100%;
+    }
+}
+ 
+@media (max-width:$zd-sm){
+    [class*=zd-md-]{
+        width: 100%;
+    }
+    [class*=zd-sm-]{
+        display: inline-block;
+    }
+
+    // zd-sm-*,zd-smLeft-*,zd-smRight-*
+    @for $i from 1 through 12{
+        .zd-sm-#{$i}{
+            width: $i/12 * 100%;
+        }
+        .zd-smLeft-#{$i}{
+            margin-left:$i/12 *100%;
+        }
+        .zd-smRight-#{$i}{
+            margin-right: $i/12*100%;
+        }
+    }
+
+    // md-hide
+    .md-hiden{
+        display: none;
+    }
+
+    // sm-fLeft sm-fRight
+    .sm-fLeft{
+        float: left;
+    }
+    .sm-fRight{
+        float: right;
+    }
+
+    // sm-hiden
+    .sm-hiden{
+        display: none;
+    }
+}
+
+@media (max-width:$zd-xs){
+    [class*=zd-sm-]{
+        width: 100%;
+    }
+
+    [class*=zd-xs-]{
+        display: inline-block;
+    }
+    // zd-xs-*,zd-xsLeft-*,zd-xsRight-*
+    @for $i from 1 through 12{
+        .zd-xs-#{$i}{
+            width: $i/12 * 100%;
+        }
+        .zd-xsLeft-#{$i}{
+            margin-left:$i/12 *100%;
+        }
+        .zd-xsRight-#{$i}{
+            margin-right: $i/12*100%;
+        }
+    }
+
+    // sm-fLeft sm-fRight
+    .sm-fLeft{
+        float: left;
+    }
+    .sm-fRight{
+        float: right;
+    }
+    
+    // xs-hide
+    .xs-hide{
+        display: none;
+    }
+}
+
+[class*=grid-]{
+    display: grid;
+
+    &:after,&:before{
+        position: absolute;
+    }
+    @for $i from 1 through 5{
+        [class*=column#{$i}]{
+            grid-column: #{$i}
+        }
+        [class*=-row#{$i}]{
+            grid-row: #{$i}
+        }
+    }
+}
+
+.flex{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    
+    @for $i from 1 through 12{
+        .flex-#{$i}{
+            -webkit-box-flex:#{$i};
+                -ms-flex:#{$i};
+                    flex:#{$i};
+        }
+    }
+}
+
+@for $i from 1 through 5{
+    [class*=grid-c#{$i}]{
+        grid-template-columns: repeat(#{$i},1fr);
+    }
+    [class*=grid-w#{$i}]{
+        grid-template-rows: repeat(#{$i},1fr);
+    }
+}
+[class*=zd-mdLeft],[class*=zd-smLeft],[class*=zd-xsLeft]{
+    width: auto;
+}
+
+
+
+
+// fLeft fRight
+.fLeft{
+    float: left;
+}
+.fRight{
+    float: right;
+}
+
+// hiden
+.hide{
+    display: none;
+}
+
+
+
+// blockquote
+blockquote,.blockquote{
+    @include sizing(border-box);
+    padding: 1.5rem 0.5rem;
+    border-left: 5px solid #094fb7;
+    display: block;
+    font-size: 15px;
+    word-wrap: break-word;
+    letter-spacing: 1px;
+    background: #e3eefb;
+    max-width: 99%;
+    margin: 0 auto;
+    color: #525050;
+    clear:both;
+    margin-bottom: 0.5rem;
+}
+
+.clearFloat{
+    @include clearFloat();
+}
+
+[class*=Cent]{
+    @include clearFloat();
+    margin: auto; 
+    min-width: 1px;min-height: 1px;
+    position: absolute;
+}
+.verCent{
+    left: 0;right: 0;
+}
+.levCent{
+    top: 0;bottom: 0;
+}
+.rgCent{
+    right: 0;
+}
+.verhotCent{
+    left: 0;right: 0;
+    top: 0;bottom: 0;
+}
+
+
+// text-*
+.txt-cent{
+    text-align: center;
+}
+.txt-left{
+    text-align: left;
+}
+.txt-right{
+    text-align: right;
+}
+
+// txt-eme
+.txt-eme{
+    color:$color;
+}
+.txt-emeW{
+    color:$color;
+    font-weight: bold;
+}
+
+.bor-eme{
+    @include bor(1px,solid,$color)
+}
+
+// Button
+[class*=bt-]{
+    float: left;
+    margin-left: 5px;
+    font-size: 15px;
+    border-radius: 5px;text-align: center;
+    border: none;
+    background: transparent;
+    color:$color;
+    margin-top: 5px;
+    position: relative;
+    -webkit-transition: .3s;
+    transition: .3s;
+    padding: 0 20px;
+    cursor: pointer;
+    text-decoration: none;
+    height: 37px;
+    display: inline-block;
+    @include bor(1px,solid,transparent);
+    overflow: hidden;
+    line-height: 37px;
+    outline: none;
+}
+.bt-btn{
+    color: #fff;
+    background: $color;
+    @include box-shadow(2px,2px,1px,#d7d8dc);
+
+    &:hover{
+        background: #114490;
+    }
+}
+
+.bt-line{
+    @include bor(1px,solid,$color);
+
+    &:hover{
+        border-color: #6f6b6b;
+        color: #6f6b6b;
+        background: #f3f5f9;
+    }
+}
+
+.bt-group{
+    border-color: $color;
+    @include box-shadow(2px,2px,1px,#d7d8dc);
+    background: $color;
+    padding: 0;
+    
+    .bt-def{
+        color:#fff;
+        margin: 0;
+        border-radius: 0;
+
+        &+.bt-def{
+            border-left: 1px solid #233e69;
+        }
+
+        &:hover{
+            background: #114490;
+        }
+    }
+}
+
+.bt-group-line{
+    border-color: $color;
+    @include box-shadow(2px,2px,1px,#d7d8dc);
+    background: #fff;
+    padding: 0;
+    
+    .bt-line{
+        color:$color;
+        margin: 0;
+        border-radius: 0;
+        border-color: transparent;
+
+        &+.bt-line{
+            border-left:1px solid $color;
+        }
+
+        &:hover{
+            color: #6f6b6b;
+            background: #f1f4fa;
+        }
+    }
+}
+
+.bt-groupV{
+    border-color: $color;
+    @include box-shadow(2px,2px,1px,#d7d8dc);
+    background: $color;
+    padding: 0;height:auto;
+
+    .bt-def{
+        color:#fff;
+        width: 100%;
+        margin: 0;
+        border: none;
+        padding: 0;
+
+        &:nth-child(1){
+            border-radius: 0;
+        }
+
+        &:hover{
+            background:#114490;
+        }
+
+        &+.bt-def{
+            border-top: 1px solid #233e69;
+            border-radius: 0;
+        }
+    }
+}
+
+.bt-group-lineV{
+    border-color: $color;
+    @include box-shadow(2px,2px,1px,#d7d8dc);
+    background: #fff;
+    padding: 0;height:auto;
+
+    .bt-line{
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: none;
+
+        &:hover{
+            color: #6f6b6b;
+            background: #f1f4fa;
+        }
+
+        & + .bt-line{
+            border-top: 1px solid $color;
+            border-radius: 0;
+        }
+    }
+}
+
+[class*=caret]{
+    float: left;
+}
+.caret{
+    @include careat(10px,solid,#ddd,transparent,transparent,transparent);
+}
+.caret-right{
+    @include careat(10px,solid,transparent,transparent,transparent,#ddd)
+}
+.caret-top{
+    @include careat(10px,solid,transparent,transparent,#ddd,transparent)
+}
+.caret-left{
+    @include careat(10px,solid,transparent,#ddd,transparent,transparent)
+}
+
+
+.caretB{
+    @include careat(10px,solid,#ddd,transparent,transparent,transparent,true,-12px);
+    &:after{
+        border-color:#f8f8f8 transparent transparent transparent;
+    }
+}
+.caret-rightB{
+    @include careat(10px,solid,transparent,transparent,transparent,#ddd,true,-10px,-12px);
+    &:after{
+        border-color:transparent transparent transparent #f8f8f8;
+    }
+}
+.caret-topB{
+    @include careat(10px,solid,transparent,transparent,#ddd,transparent,true,-8px);
+    &:after{
+        border-color:transparent transparent #f8f8f8 transparent;
+    }
+}
+.caret-leftB{
+    @include careat(10px,solid,transparent,#ddd,transparent,transparent,true,-10px,-8px);
+    &:after{
+        border-color:transparent #f8f8f8 transparent transparent;
+    }
+}
+
+.caret-eme{
+    @include careat(10px,solid,$color,transparent,transparent,transparent);
+}
+.caret-right-eme{
+    @include careat(10px,solid,transparent,transparent,transparent,$color)
+}
+.caret-top-eme{
+    @include careat(10px,solid,transparent,transparent,$color,transparent)
+}
+.caret-left-eme{
+    @include careat(10px,solid,transparent,$color,transparent,transparent)
+}
+
+
+.caretB-eme{
+    @include careat(10px,solid,$color,transparent,transparent,transparent,true,-12px);
+    &:after{
+        border-color:#fff transparent transparent transparent;
+    }
+}
+.caret-rightB-eme{
+    @include careat(10px,solid,transparent,transparent,transparent,$color,true,-10px,-12px);
+    &:after{
+        border-color:transparent transparent transparent #fff;
+    }
+}
+.caret-topB-eme{
+    @include careat(10px,solid,transparent,transparent,$color,transparent,true,-8px);
+    &:after{
+        border-color:transparent transparent #fff transparent;
+    }
+}
+.caret-leftB-eme{
+    @include careat(10px,solid,transparent,$color,transparent,transparent,true,-10px,-8px);
+    &:after{
+        border-color:transparent #fff transparent transparent;
+    }
+}
+
+[class*=panel-]{
+    @include clearFloat();
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+}
+.panel-def,[class*=panel-def-]{
+    border-color: #ddd;
+    background: #f8f8f8;
+}
+
+[class*=panel-def-T],[class*=panel-eme-T]{
+    margin-top: 15px;
+
+    [class*=caret]{
+        position: absolute;
+    }
+}
+
+.panel-def-T1{
+
+    .caret-topB{
+        top: -20px;
+        left: 15%;
+    }
+
+    .caretB{
+        bottom: -29px;
+        left: 15%;
+    }
+}
+
+.panel-def-T2{
+    
+    .caret-topB{
+        top: -20px;
+        left: 50%;
+    }
+
+    .caretB{
+        bottom: -29px;
+        left: 50%;
+    }
+}
+
+.panel-def-T3{
+    
+    .caret-topB{
+        top: -20px;
+        left: 75%;
+    }
+
+    .caretB{
+        bottom: -29px;
+        left: 75%;
+    }
+}
+
+//  *-eme
+.panel-eme,[class*=panel-eme-]{
+    border-color:$color;
+    background: $color;
+    color:#fff;
+    @include box-shadow(1px ,2px, 7px,rgb(175, 206, 251));
+}
+.panel-eme-T1{
+
+    .caret-top-eme{
+        top: -20px;
+        left: 15%;
+    }
+
+    .caret-eme{
+        bottom: -29px;
+        left: 15%;
+    }
+}
+
+.panel-eme-T2{
+    
+    .caret-top-eme{
+        top: -20px;
+        left: 50%;
+    }
+
+    .caret-eme{
+        bottom: -29px;
+        left: 50%;
+    }
+}
+
+.panel-eme-T3{
+    
+    .caret-top-eme{
+        top: -20px;
+        left: 75%;
+    }
+
+    .caret-eme{
+        bottom: -29px;
+        left: 75%;
+    }
+}
+
+[class*=crumbs]{
+    position:relative;
+    display: block;
+
+    li,a,span{
+        display: inline-block;float: left;color:#000;
+
+        &+li,&+a,&+span{
+            margin-left: 25px;
+
+            &:after{
+                content: '/';
+                position: absolute;
+                left: -15px;
+                top: 0px;
+                color: #ccc;
+            }
+        }
+    }
+}
+.crumbs-eme{
+    li,a,span{color: $color;}
+    &+li,&+a,&+span{
+        color: $color;
+    }
+}

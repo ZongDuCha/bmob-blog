@@ -1,26 +1,26 @@
 <template>
   <div id="app">
     <Top/>
-    <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
 
 <script>
 import Top from './components/top'
-import { logo } from './components/api.js'
 export default {
   name: 'app',
-  components:{ Top },
-  mounted:function(){
-    logo('q7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba')
-  }
+  components:{ Top }
 }
 </script>
 
 <style lang="scss">
+$color:#fff;
 *{
   padding:0;margin:0;
+}
+a,li{
+  list-style: none;
+  color:#1c1d1c;text-decoration: none;
 }
 img{
   max-width:100%;
@@ -30,6 +30,6 @@ img{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: $color;
 }
 </style>
