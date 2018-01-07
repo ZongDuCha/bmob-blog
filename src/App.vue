@@ -14,7 +14,6 @@ export default {
 </script>
 
 <style lang="scss">
-$color:#fff;
 *{
   padding:0;margin:0;
 }
@@ -30,6 +29,6 @@ img{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: $color;
+  color: #fff;
 }
 </style>
