@@ -83,21 +83,16 @@ export const getStatus = (getscore,getCloumn,getRow) => {
 */
 export const getallStatus = (allscore) => {
     login()
+    var list,get;
     var GameScore = Bmob.Object.extend(allscore);
     var query = new Bmob.Query(GameScore);
     // 查询所有数据
-    query.find({
-    success: function(results) {
-        console.log("共查询到 " + results.length + " 条记录");
-        // 循环处理查询到的数据
-        for (var i = 0; i < results.length; i++) {
-            var object = results[i];
-            return object;
+    return query.find({
+        success: function(results) {
+            return results
+        },
+        error: function(error) {
+            console.log("查询失败: " + error.code + " " + error.message);
         }
-    },
-    error: function(error) {
-        console.log(1)
-        console.log("查询失败: " + error.code + " " + error.message);
-    }
     });
 }

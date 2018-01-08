@@ -4,16 +4,13 @@
       <img src="../assets/logo-bj.jpg" alt="">
 
       <nav>
-          <div class="menu">
+          <div class="menu" @click="left = !left">
               <span></span>
               <span></span>
               <span></span>
           </div>
-          <div class="menu-list">
-                <li><router-link to="">Home</router-link> </li>
-                <li><router-link to="">GitHub</router-link> </li>
-                <li><router-link to="">JueJin</router-link> </li>
-                <li><router-link to="">About</router-link> </li>
+          <div :class="left ? 'menu-list left' : 'menu-list'">
+                <li v-for="(menu,index) in menu" :key="index"><router-link :to="menu.to">{{menu.name}}</router-link> </li>
           </div>
       </nav>
 
@@ -25,7 +22,7 @@
   </div>
 
   <div class="tag">
-      <li v-for="(list,index) in tagList" :key="index"><router-link :to="list.to">{{list.tagName}}</router-link></li>
+      <li v-for="(list,index) in tagList" :key="index"><router-link :class="$route.path ==list.to ? 'active' : ''" :to="list.to">{{list.tagName}}</router-link></li>
   </div>
 </div>
 </template>
@@ -35,18 +32,36 @@ export default {
     name: 'top',
     data(){
         return{
+            menu:[
+                {
+                    name: 'Home',
+                    to: '/'
+                },
+                {
+                    name: 'Github',
+                    to: 'https://github.com/ZongDuCha'
+                },
+                {
+                    name:'juejin',
+                    to: 'https://juejin.im/timeline'
+                },
+                {
+                    name: 'about',
+                    to: '/about'
+                }
+            ],
             tagList:[
                 {
                     tagName: 'JavaScript',
-                    to: '/javascript'
+                    to: '/Javascript'
                 },
                 {
                     tagName: 'Webpack',
-                    to: '/webpack'
+                    to: '/Webpack'
                 },
                 {
                     tagName: 'Sass',
-                    to: '/sass'
+                    to: '/Sass'
                 },
                 {
                     tagName: 'Nodejs',
@@ -54,29 +69,31 @@ export default {
                 },
                 {
                     tagName: 'Vue',
-                    to: '/vue'
+                    to: '/Vue'
                 }
             ],
-            left: 'left'
+            // 控制小屏下的侧边导航栏
+            left: false
         }
     }
 }
 </script>
 
 <style lang='scss'>
+
 .tag{
     color:#000;
     text-align: center;
 
     li{
         display:inline-block;
-        margin-top:20px;
+        margin-top:5px;
     }
     a{
         margin: 5px 10px;
         -webkit-transition: .3s;
         transition: .3s;
-        background: #f5efef;
+        background: #fff;
         padding: 10px 30px;
         border-radius: 3px;
         font-size: 13px;
@@ -94,7 +111,6 @@ export default {
 }
 .top{
     width:100%;
-    position: relative;
 
     nav{
         position: absolute;
@@ -121,6 +137,7 @@ export default {
         }
 
         .menu-list{
+            transition:.3s;
             @media (max-width:$zd-xs){
                 position: fixed;
                 height: 100%;
@@ -158,6 +175,10 @@ export default {
                 }
             }
         }
+
+        .left{
+            left:60%;
+        }
     }
 
     .logo{
@@ -169,25 +190,48 @@ export default {
         right: 0;
         margin: auto;
         height:160px;
+        
     
         img{
             border-radius: 50%;
-            width: 160px;
+            max-width: 160px;
+
+            @media (max-width:$zd-sm){
+                display:none;
+            }
         }
         p{
             margin-top:20px;letter-spacing: 3px;
             font-size: 14px;color:#fff;
+            -webkit-animation:panimate .8s;
+
+            @media (max-width:$zd-sm){
+                position:absolute;
+                bottom:55px;left:0;right:0;margin:auto;
+            }
         }
 
         &:before{
             position: absolute;content:''; transform: rotate(0deg);
             left:0;right: 0;margin:auto;
-            width:160px;height:160px;border-radius:50%;box-shadow: 0 3px 0 #fff;
+            width: 160px;height: 160px;border-radius:50%;box-shadow: 0 3px 0 #fff;
             -webkit-animation: nameimg 1s infinite linear;
+
+            @media (max-width:$zd-sm){
+                display:none;
+            }
         }
     }
 }
 
+@-webkit-keyframes panimate{
+    0%{
+        margin-top:100px
+    }
+    100%{
+        margin-top:20px;
+    }
+}
 @-webkit-keyframes nameimg{
     0%{
         transform: rotate(0deg);

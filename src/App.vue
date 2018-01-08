@@ -17,6 +17,9 @@ export default {
 *{
   padding:0;margin:0;
 }
+body{
+  background:#eaeaea;
+}
 a,li{
   list-style: none;
   color:#1c1d1c;text-decoration: none;
