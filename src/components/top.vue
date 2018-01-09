@@ -10,7 +10,10 @@
               <span></span>
           </div>
           <div :class="left ? 'menu-list left' : 'menu-list'">
-                <li v-for="(menu,index) in menu" :key="index"><router-link :to="menu.to">{{menu.name}}</router-link> </li>
+                <li> <router-link to="/">Home</router-link> </li>
+                <li> <a href="https://github.com/ZongDuCha/bmob-blog" target="_blank">Github</a></li>
+                <li> <a href="https://juejin.im/user/599ef403518825243217317c" target="_blank">Juejin</a></li>
+                <li> <router-link to="/about">About</router-link></li>
           </div>
       </nav>
 
@@ -18,11 +21,6 @@
           <img src="../assets/logonameimg.png" alt="">
           <p>梦想还是要有的，万一实现了呢</p>
       </div>
-      
-  </div>
-
-  <div class="tag">
-      <li v-for="(list,index) in tagList" :key="index"><router-link :class="$route.path ==list.to ? 'active' : ''" :to="list.to">{{list.tagName}}</router-link></li>
   </div>
 </div>
 </template>
@@ -32,46 +30,6 @@ export default {
     name: 'top',
     data(){
         return{
-            menu:[
-                {
-                    name: 'Home',
-                    to: '/'
-                },
-                {
-                    name: 'Github',
-                    to: 'https://github.com/ZongDuCha'
-                },
-                {
-                    name:'juejin',
-                    to: 'https://juejin.im/timeline'
-                },
-                {
-                    name: 'about',
-                    to: '/about'
-                }
-            ],
-            tagList:[
-                {
-                    tagName: 'JavaScript',
-                    to: '/Javascript'
-                },
-                {
-                    tagName: 'Webpack',
-                    to: '/Webpack'
-                },
-                {
-                    tagName: 'Sass',
-                    to: '/Sass'
-                },
-                {
-                    tagName: 'Nodejs',
-                    to: '/Node'
-                },
-                {
-                    tagName: 'Vue',
-                    to: '/Vue'
-                }
-            ],
             // 控制小屏下的侧边导航栏
             left: false
         }
@@ -80,7 +38,6 @@ export default {
 </script>
 
 <style lang='scss'>
-
 .tag{
     color:#000;
     text-align: center;
@@ -187,7 +144,7 @@ export default {
         top: 0;
         bottom: 0;
         left: 0;
-        right: 0;
+        right: 0;text-align: center;
         margin: auto;
         height:160px;
         

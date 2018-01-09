@@ -86,6 +86,9 @@ p,a,li,ul,ol,dd,dt,div,h1,h2,h3,h4,h5{
     word-wrap: break-word;
     @include clearFloat();
 }
+div{
+    margin-bottom:0;
+}
 [class*=careat]{
     height: 0;
     position: relative;

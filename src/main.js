@@ -3,13 +3,17 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './vuex/store'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
+Vue.use(NProgress)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router,store,
   template: '<App/>',
   components: { App }
 })

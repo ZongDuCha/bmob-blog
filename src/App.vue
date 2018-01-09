@@ -28,10 +28,6 @@ img{
   max-width:100%;
 }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #fff;
+    margin-bottom: 0;text-align:center;
 }
 </style>
