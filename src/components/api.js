@@ -62,7 +62,6 @@ export const delStatus = (delScore,delSucc) => {
  * 
 */
 export const getStatus = (getscore,getCloumn,getRow) => {
-    login()
     var GameScore = Bmob.Object.extend(getscore);
     var query = new Bmob.Query(GameScore);
     query.get(getCloumn, {

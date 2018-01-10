@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Login/>
     <Top/>
     <router-view/>
   </div>
@@ -7,9 +8,10 @@
 
 <script>
 import Top from './components/top'
+import Login from './components/login'
 export default {
   name: 'app',
-  components:{ Top }
+  components:{ Top,Login }
 }
 </script>
 
