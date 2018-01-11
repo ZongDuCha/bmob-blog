@@ -6,11 +6,12 @@ import router from './router'
 import store from './vuex/store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import 'font-awesome/css/font-awesome.css'
 
 Vue.use(NProgress)
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
+/* eslint-disable no-new  */
 new Vue({
   el: '#app',
   router,store,

@@ -69,8 +69,7 @@ export default {
     },
     computed:{
         ...mapState([
-            'getCont',
-            'getlist'
+            'getCont'
         ])
     },
     methods:{
@@ -90,6 +89,7 @@ export default {
         }
     },
     mounted:function(){
+        // 滚动加载数据
         window.addEventListener('scroll',() => {
             // 滚动条滚动 的 距离
             let bodyTop = document.documentElement.scrollTop
