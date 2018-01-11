@@ -1,17 +1,23 @@
 <template>
   <div id="app">
-    <Login/>
-    <Top/>
-    <router-view/>
+    <Login v-if="loginBJ"/>
+    <Top v-if="!loginBJ" />
+    <router-view v-if="!loginBJ" />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Top from './components/top'
 import Login from './components/login'
 export default {
   name: 'app',
-  components:{ Top,Login }
+  components:{ Top,Login },
+  computed:{
+    ...mapState([
+      'loginBJ'
+    ])
+  }
 }
 </script>
 
