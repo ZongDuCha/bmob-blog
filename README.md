@@ -8,6 +8,8 @@
 # install dependencies
 npm install
 
+```
+```
 # Maybe you need these
 `Sass`
 
@@ -23,6 +25,9 @@ npm install
 
 `font-awesome`
 
+```
+
+```
 # serve with hot reload at localhost:8080
 npm run dev
 ```
