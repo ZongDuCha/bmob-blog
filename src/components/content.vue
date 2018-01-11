@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
         <div class="tag">
             <li v-for="(list,index) in tagList" :key="index">
                 <span 

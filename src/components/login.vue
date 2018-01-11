@@ -6,8 +6,8 @@
           </div>
 
           <div class="statsMenu">
-              <li :class="clickMenu ? 'active' : ''" @click="clickMenu = true">Sign in</li>
-              <li :class="!clickMenu ? 'active' : ''" @click="clickMenu = false">Sign up</li>
+              <li :class="clickMenu ? 'active' : ''" @click="clickMenu = true;errState()">Sign in</li>
+              <li :class="!clickMenu ? 'active' : ''" @click="clickMenu = false;errState()">Sign up</li>
           </div>
 
           <div class="in"  v-show="clickMenu">
@@ -17,7 +17,10 @@
                     </div>
 
                     <div class="user-input">
-                        <input type="text" @blur="inUser()" :class="!err ? 'err' : '1'" ref="inStats">
+                        <input 
+                            type="text" @blur="inUser()" 
+                            :class="!err ? 'err' : ''" 
+                            ref="inStats">
                     </div>
                 </div>
 
@@ -27,7 +30,7 @@
                     </div>
 
                     <div class="password-input">
-                        <input type="text" ref="inPass">
+                        <input type="password" ref="inPass" @keyup.enter="signIn()">
                     </div>
                 </div>
 
@@ -41,7 +44,10 @@
                     </div>
 
                     <div class="user-input">
-                        <input type="text" ref="upStats" @blur="upUser()">
+                        <input 
+                            type="text"
+                            ref="upStats" 
+                            :class="!err ? 'err' : ''">
                     </div>
                 </div>
 
@@ -51,11 +57,11 @@
                     </div>
 
                     <div class="password-input">
-                        <input type="text" ref="upPass">
+                        <input type="password" ref="upPass" @keyup.enter="signUp()">
                     </div>
                 </div>
 
-                <button @click="sigUp()">注册</button>
+                <button @click="signUp()">注册</button>
           </div>
 
       </div>
@@ -69,12 +75,14 @@ export default {
     name: 'login',
     data(){
         return{
-            clickMenu: false
+            clickMenu: true
         }
     },
     computed:{
         ...mapState([
-            'err'
+            'err',
+            'loginBJ',
+            'inputStats'
         ])
     },
    methods:{
@@ -90,23 +98,23 @@ export default {
                 inPassword: this.$refs.inPass.value
            })
        },
-       // 注册
-       upUser: function (){
-           this.$store.dispatch('inStats',{
-               inUser: this.$refs.upStats.value,
-           })
-       },
-       sigUp:function(){
-           this.$store.dispatch('sigUp',{
+       signUp:function(){
+           this.$store.dispatch('signUp',{
                upUser:this.$refs.upStats.value,
                upPass:this.$refs.upPass.value
            })
+       },
+       errState:function(){
+           this.$store.commit('errState')
        }
    }
 }
 </script>
 
 <style lang='scss'>
+.close{
+    display: none;
+}
 .login{
     position:fixed;background:#fff;text-align:left;
     width:100%;z-index: 2;display: block;height:100%;
@@ -114,7 +122,8 @@ export default {
 
     .login-container{
         width: 420px;
-        height: 620px;
+        height: 550px;
+        max-width: 100%;
         border: 1px solid #ddd;
         position: absolute;
         top: 0;
@@ -178,12 +187,12 @@ export default {
         }
 
         .in,.up{
+            
             box-sizing:border-box;padding:0 20px;text-align:center;
         }
 
         .user,.password{
             display:flex;
-
             .user-i,.password-i{
                 flex: 0 0 55px;
             }

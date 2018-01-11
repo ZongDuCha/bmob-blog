@@ -103,6 +103,16 @@ div{
     position:relative;display:block;
     width: 1200px;margin:0 auto;margin-bottom: 10px;
     @include clearFloat();
+
+    @media (max-width:$zd-md){
+        width:$zd-sm;
+    }
+    @media (max-width:$zd-sm){
+        width:$zd-xs;
+    }
+    @media (max-width:$zd-xs){
+        width:100%;
+    }
 }
 
 [class*=zd-md-],[class*=zd-sm-],[class*=zd-xs-]{
