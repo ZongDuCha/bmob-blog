@@ -19,7 +19,10 @@
 
       <div class="logo">
           <img src="../assets/logonameimg.png" alt="">
-          <p v-if="name"><a>{{name}}</a> <a @click="cleanlocal">退出</a></p>
+          <p v-if="name">
+              <a>{{name}}</a> 
+              <a @click="cleanlocal">退出</a>
+            </p>
           <p v-if="!name" onclick="window.location.reload()"><a>去登录</a></p>
           <p>梦想还是要有的，万一实现了呢</p>
       </div>

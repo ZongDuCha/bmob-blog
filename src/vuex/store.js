@@ -15,17 +15,19 @@ const state = {
 }
 
 const mutations = {
+    // app 判断是否有值
     local:(state) => {
         localStorage.getItem('name') ? state.loginBJ = true : state.loginBJ = false
     },
+    // content 退出清除localStorage 并刷新
     cleanlocal: (state) => {
         localStorage.removeItem('name')
         location.reload(false)
     },
-    login: (state) => {
+    login: () => {
         Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
-    // 首页文章 （查询所有数据）
+    // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
         var GameScore = Bmob.Object.extend(type.tabName);
         var query = new Bmob.Query(GameScore);
@@ -40,7 +42,7 @@ const mutations = {
             }
         });
     },
-    // login登录 (查询单条数据)
+    // login 登录 (查询单条数据)
     inStats:(state,type) => {
         state.mesState = state.mesTitle = ''
         var GameScore = Bmob.Object.extend('user_name');
@@ -62,8 +64,8 @@ const mutations = {
                     state.mesTitle = `${results[0].attributes.name} , 欢迎您!`
                 }
               }else{
-                  // 判断是否有 添加密码
-                  !type.inPassword ? state.err = false : (state.mesState='err',state.mesTitle = '登录失败')
+                  // login 判断是否有 添加密码
+                  type.inPassword ? (state.mesState='err',state.mesTitle = '登录失败') : state.err = false
               }
             },
             error: function(error) {
@@ -90,17 +92,17 @@ const mutations = {
                     }
                 },
                 error: function(result, error) {
-                    (state.mesState='err',state.mesTitle = '注册失败')
+                    state.mesState='err',state.mesTitle = '注册失败'
                     console.log('创建日记失败');
                 }
             });
         }
     },
-    // 随便看看
+    // login 随便看看
     skip: (state) => {
         state.loginBJ = true
     },
-    // 重置 err状态
+    // login 重置 err状态
     errState:(state) => {
         state.err = true
     }

@@ -21,11 +21,16 @@
                 <a @click="className = tag;getcontent();" v-for="(tag,index) in item.attributes.newTag" :key="index">{{tag}}</a>
             </div>
             <div class="news-time" v-if="item.createdAt"><span>发布时间：{{item.createdAt}}</span></div>
+
+            <div class="operation">
+                <i class="fa fa-trash faa-wrench animated-hover"></i>
+                <i class="fa fa-wpforms faa-wrench animated-hover"></i>
+            </div>
         </div>
     </section>
     <div class="loading">
         <div v-if="loading">
-            <i v-if="!loginBJ" 
+            <i v-if="loginBJ" 
                 class="fa fa-spinner faa-spin animated"></i> 
                 数据加载中.....
         </div>
@@ -82,7 +87,6 @@ export default {
             this.getlist++
             this.loading = true
             NProgress.start();
-            console.log(this.getlist)
             this.$store.dispatch('getallState',{
                 getlist:this.getlist,
                 tabName:'news',
@@ -103,7 +107,7 @@ export default {
             // 整个文档 的高度
             let bodyCiHeight = document.body.clientHeight
 
-            if(bodyTop + winHeight >= bodyCiHeight-100) this.getcontent()
+            if(bodyTop + winHeight >= bodyCiHeight-50) this.getcontent()
         });
     },
     created(){
@@ -207,6 +211,16 @@ export default {
                 background:#e6c441;font-size: 10px;
                 color:#fff;padding:3px 10px;font-weight: 100px;
                 border-radius: 2px;transition:.3s;
+            }
+        }
+        .operation{
+            display: inline;
+            i{
+                    font-size: 22px;
+                    color: rgb(111, 122, 169);
+                    float: right;
+                    cursor: pointer;
+                    margin-left: 20px;
             }
         }
         >&+a{

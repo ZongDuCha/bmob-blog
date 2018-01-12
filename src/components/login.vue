@@ -2,7 +2,7 @@
   <div class="login">
       <div class="login-container">
           <div class="login-title">
-              Sir 博客
+              ZongDuSir
           </div>
 
           <div class="statsMenu">
@@ -136,13 +136,13 @@ export default {
 .login{
     position:fixed;background:#fff;text-align:left;
     width:100%;z-index: 2;display: block;height:100%;
-    background: linear-gradient(to left, #eadd46, #56cef3);
+    background: linear-gradient(to left, #f55bf0, #56cef3);
 
     .login-container{
         width: 360px;
         height: 530px;
         max-width: 100%;
-        border: 1px solid #ddd;
+        border: 1px solid rgba(255, 255, 255, 0.1490196);
         position: absolute;
         top: 0;
         bottom: 0;
@@ -150,11 +150,10 @@ export default {
         right: 0;
         margin: auto;
         border-radius: 3px;
-        border:none;
         border-top: 4px solid $color;
         box-sizing:border-box;
         padding:10px;
-        background: rgba(188, 245, 227, 0.46);
+        background: rgba(188, 245, 227, 0.27);
         box-shadow: -2px 7px 15px rgba(63, 63, 63, 0.04);
 
         *{
@@ -166,6 +165,8 @@ export default {
             font-size: 18px;
             margin-bottom: 10px;
             color: #e00b0b;
+            font-weight: 900;
+            text-shadow: 0 1px 15px #fff;
         }
 
         .statsMenu{
