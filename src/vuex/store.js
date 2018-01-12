@@ -4,16 +4,25 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
+    // message 数据
+    mesState: '',
+    mesTitle: '',
     // login 状态
     err: true,
-    inputStats: false,
-    loginBJ: true,
-    // -- 首页文章条目 
+    loginBJ: false,
+    // -- content 首页文章条目 
     getCont: ''
 }
 
 const mutations = {
-    login: () => {
+    local:(state) => {
+        localStorage.getItem('name') ? state.loginBJ = true : state.loginBJ = false
+    },
+    cleanlocal: (state) => {
+        localStorage.removeItem('name')
+        location.reload(false)
+    },
+    login: (state) => {
         Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // 首页文章 （查询所有数据）
@@ -33,7 +42,7 @@ const mutations = {
     },
     // login登录 (查询单条数据)
     inStats:(state,type) => {
-        state.inputStats = 1123;
+        state.mesState = state.mesTitle = ''
         var GameScore = Bmob.Object.extend('user_name');
         var query = new Bmob.Query(GameScore);
         // 值存在就执行条件
@@ -42,46 +51,56 @@ const mutations = {
 
         query.find({
             success: function(results) {
-                console.log(results)
+                
                 // 登录 判断 用户名存在 和 登录成功
               if(type.inUser != undefined && results.length > 0){
                 results[0].attributes.name == type.inUser ? state.err = true : ''
-                results[0].attributes.password == type.inPassword ? state.loginBJ = false : ''
-
+                if(results[0].attributes.password == type.inPassword){
+                    state.loginBJ = true
+                    state.mesState = 'suc'
+                    localStorage.setItem('name',results[0].attributes.name)
+                    state.mesTitle = `${results[0].attributes.name} , 欢迎您!`
+                }
               }else{
                   // 判断是否有 添加密码
-                  !type.inPassword ? state.err = false : console.log('no')
+                  !type.inPassword ? state.err = false : (state.mesState='err',state.mesTitle = '登录失败')
               }
             },
             error: function(error) {
-                type.inPassword ? console.log(1) : state.err = false
+                type.inPassword ? (state.mesState='err',state.mesTitle = '登录失败') : state.err = false
             }
           });
     },
-    // login 注册 （添加单条数据
+    // login 注册 （添加单条数据)
     signUp:(state,type) => {
         if(type){
+            state.mesState = state.mesTitle = ''
             var Diary = Bmob.Object.extend("user_name");
             var diary = new Diary();
             diary.set("name",type.upUser)
             diary.set("password",type.upPass)
             diary.save(null, {
                 success: function(result) {
-                    console.log(result.id)
                     if(result.id && type.upUser && type.upPass){
-                        state.inputStats = state.err = true;console.log("创建成功")
+                        state.mesState='suc',state.mesTitle = '注册成功'
+                        console.log("创建成功")
                     }else{
+                        state.mesState='err',state.mesTitle = '注册失败'
                         console.log('失败');
                     }
                 },
                 error: function(result, error) {
-                    state.inputStats = true
+                    (state.mesState='err',state.mesTitle = '注册失败')
                     console.log('创建日记失败');
                 }
             });
         }
-        
     },
+    // 随便看看
+    skip: (state) => {
+        state.loginBJ = true
+    },
+    // 重置 err状态
     errState:(state) => {
         state.err = true
     }

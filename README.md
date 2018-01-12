@@ -30,6 +30,8 @@ npm run dev
 
 `font-awesome`
 
+`font-awesome-animation`
+
 ```
 
 

@@ -18,13 +18,17 @@
                 {{item.attributes.content}}
             </p>
             <div class="me-tag">
-                <router-link :to="tag" v-for="(tag,index) in item.attributes.newTag" :key="index">{{tag}}</router-link>
+                <a @click="className = tag;getcontent();" v-for="(tag,index) in item.attributes.newTag" :key="index">{{tag}}</a>
             </div>
             <div class="news-time" v-if="item.createdAt"><span>发布时间：{{item.createdAt}}</span></div>
         </div>
     </section>
     <div class="loading">
-        <div v-if="loading">数据加载中.....</div>
+        <div v-if="loading">
+            <i v-if="!loginBJ" 
+                class="fa fa-spinner faa-spin animated"></i> 
+                数据加载中.....
+        </div>
         <div v-if="!loading">暂无数据</div>
     </div>
   </div>
@@ -69,7 +73,8 @@ export default {
     },
     computed:{
         ...mapState([
-            'getCont'
+            'getCont',
+            'loginBJ'
         ])
     },
     methods:{
@@ -98,9 +103,7 @@ export default {
             // 整个文档 的高度
             let bodyCiHeight = document.body.clientHeight
 
-            if(bodyTop + winHeight >= bodyCiHeight-100){
-                this.getcontent()
-            }
+            if(bodyTop + winHeight >= bodyCiHeight-100) this.getcontent()
         });
     },
     created(){
@@ -184,7 +187,7 @@ export default {
         .me-tag{
             display:inline-block;
             a{
-                display: inline-block;
+                display: inline-block;cursor: pointer;
                 background:$color;font-size: 10px;
                 color:#fff;padding:3px 10px;font-weight: 100px;
                 border-radius: 2px;transition:.3s;    margin-right: 10px;

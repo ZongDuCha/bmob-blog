@@ -19,6 +19,8 @@
 
       <div class="logo">
           <img src="../assets/logonameimg.png" alt="">
+          <p v-if="name"><a>{{name}}</a> <a @click="cleanlocal">退出</a></p>
+          <p v-if="!name" onclick="window.location.reload()"><a>去登录</a></p>
           <p>梦想还是要有的，万一实现了呢</p>
       </div>
   </div>
@@ -26,12 +28,19 @@
 </template>
 
 <script>
+import store from 'vuex'
 export default {
     name: 'top',
     data(){
         return{
             // 控制小屏下的侧边导航栏
-            left: false
+            left: false,
+            name: localStorage.getItem('name')
+        }
+    },
+    methods:{
+        cleanlocal:function(){
+            this.$store.commit('cleanlocal')
         }
     }
 }
@@ -158,13 +167,22 @@ export default {
             }
         }
         p{
-            margin-top:20px;letter-spacing: 3px;
+            margin-top:10px;letter-spacing: 3px;
             font-size: 14px;color:#fff;
             -webkit-animation:panimate .8s;
 
+            a{
+                display: inline-block;color:#fff;
+                text-decoration: underline;cursor: pointer;
+            }
+
             @media (max-width:$zd-sm){
                 position:absolute;
-                bottom:55px;left:0;right:0;margin:auto;
+                bottom:73px;left:0;right:0;margin:auto;
+
+                &+p{
+                    margin-bottom:-20px;
+                }
             }
         }
 

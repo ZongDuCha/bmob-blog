@@ -7,6 +7,7 @@ import store from './vuex/store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import 'font-awesome/css/font-awesome.css'
+import 'font-awesome-animation/dist/font-awesome-animation.css'
 
 Vue.use(NProgress)
 Vue.config.productionTip = false

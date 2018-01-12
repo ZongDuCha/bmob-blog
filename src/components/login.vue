@@ -34,7 +34,9 @@
                     </div>
                 </div>
 
-                <button @click="signIn()">登录</button>
+                <button @click="signIn()">
+                        登录
+                </button>
           </div>
 
           <div class="up" v-show="!clickMenu">
@@ -44,8 +46,10 @@
                     </div>
 
                     <div class="user-input">
+                        <!-- :value 点击注册清除内容 -->
                         <input 
                             type="text"
+                            :value="mesState ? '' : ''"
                             ref="upStats" 
                             :class="!err ? 'err' : ''">
                     </div>
@@ -57,13 +61,16 @@
                     </div>
 
                     <div class="password-input">
-                        <input type="password" ref="upPass" @keyup.enter="signUp()">
+                        <input type="password" 
+                                ref="upPass" 
+                                :value="mesState ? '' : ''"
+                                @keyup.enter="signUp()">
                     </div>
                 </div>
 
                 <button @click="signUp()">注册</button>
           </div>
-
+          <a class="skip" @click="skip()">随便看看</a>
       </div>
   </div>
 </template>
@@ -81,8 +88,9 @@ export default {
     computed:{
         ...mapState([
             'err',
+            'inputState',
             'loginBJ',
-            'inputStats'
+            'mesState'
         ])
     },
    methods:{
@@ -98,12 +106,18 @@ export default {
                 inPassword: this.$refs.inPass.value
            })
        },
+       // 注册
        signUp:function(){
            this.$store.dispatch('signUp',{
                upUser:this.$refs.upStats.value,
                upPass:this.$refs.upPass.value
            })
        },
+       // 随便看看
+       skip:function(){
+           this.$store.commit('skip')
+       },
+       // 重置 err状态
        errState:function(){
            this.$store.commit('errState')
        }
@@ -112,17 +126,21 @@ export default {
 </script>
 
 <style lang='scss'>
+.skip{
+    text-decoration: underline;display: block;font-size: 13px;cursor: pointer;
+    margin-top:20px;text-align: center;padding-bottom:5px;letter-spacing: 2px;
+}
 .close{
     display: none;
 }
 .login{
     position:fixed;background:#fff;text-align:left;
     width:100%;z-index: 2;display: block;height:100%;
-    background: linear-gradient(to left, #b7ae45, #56cef3);
+    background: linear-gradient(to left, #eadd46, #56cef3);
 
     .login-container{
-        width: 420px;
-        height: 550px;
+        width: 360px;
+        height: 530px;
         max-width: 100%;
         border: 1px solid #ddd;
         position: absolute;
