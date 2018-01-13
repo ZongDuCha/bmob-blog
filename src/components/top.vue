@@ -174,6 +174,12 @@ export default {
             font-size: 14px;color:#fff;
             -webkit-animation:panimate .8s;
 
+            @media (min-width:1400px){
+                font-size:16px;
+                margin-top:30px;
+            }
+
+
             a{
                 display: inline-block;color:#fff;
                 text-decoration: underline;cursor: pointer;

@@ -185,17 +185,17 @@ export default {
                 -ms-user-select:none;transition:.3s;
                 user-select:none;
 
-                &:before{
+                &::after{
                     position: absolute;transition:.3s;
                     bottom:0;left:0;right:0;margin:auto;
-                    width:0;height:2px;background:$color;
+                    width:0%;height:2px;background:$color;
                 }
             }
 
             .active{
                 color:$color;
 
-                &:before{
+                &::after{
                     width:60%;
                 }
 

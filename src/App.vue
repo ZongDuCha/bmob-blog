@@ -28,7 +28,7 @@ export default {
 
 <style lang="scss">
 *{
-  padding:0;margin:0;
+  padding:0;margin:0;outline: none;
 }
 body{
   background:#eaeaea;

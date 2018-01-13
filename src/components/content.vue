@@ -1,4 +1,5 @@
 <template>
+<div class="container-fluid">
   <div class="container">
         <div class="tag">
             <li v-for="(list,index) in tagList" :key="index">
@@ -23,8 +24,8 @@
             <div class="news-time" v-if="item.createdAt"><span>发布时间：{{item.createdAt}}</span></div>
 
             <div class="operation">
-                <i class="fa fa-trash faa-wrench animated-hover"></i>
-                <i class="fa fa-wpforms faa-wrench animated-hover"></i>
+                <i class="fa fa-trash faa-wrench animated-hover" alt="删除" title="删除"></i>
+                <i class="fa fa-wpforms faa-wrench animated-hover"  alt="删除" title="删除"></i>
             </div>
         </div>
     </section>
@@ -37,12 +38,17 @@
         <div v-if="!loading">暂无数据</div>
     </div>
   </div>
+
+<!-- 显示文章组件 -->
+<NewsDetail/>
+</div>
 </template>
 
 <script>
 import stroe from 'vuex'
 import NProgress from 'nprogress'
 import { mapState,mapActions} from 'vuex'
+import NewsDetail from './newsDetail'
 export default {
     data(){
         return{
@@ -71,6 +77,7 @@ export default {
             ],
         }
     },
+    components:{ NewsDetail },
     methods:{
         ...mapActions([
             'getallState'

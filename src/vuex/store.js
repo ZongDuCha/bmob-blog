@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import NProgress from 'nprogress'
 
 Vue.use(Vuex)
 
@@ -7,6 +8,21 @@ const state = {
     // message 数据
     mesState: '',
     mesTitle: '',
+    /*
+        newDetail       数据状态
+        @newShow        组件显示
+        @newTitle       文章标题
+        @newConent      文章内容
+        @newComment     文章评论
+        @newTime      文章发表时间
+        @newTag         文章分类
+    */
+    newShow : true,
+    newTitle: '',
+    newContent: '',
+    newComment: '',
+    newTime: '',
+    newTag: '',
     // login 状态
     err: true,
     loginBJ: false,
@@ -21,11 +37,13 @@ const mutations = {
     },
     // content 退出清除localStorage 并刷新
     cleanlocal: (state) => {
+        NProgress.start()
         localStorage.removeItem('name')
         location.reload(false)
+        NProgress.done()
     },
     login: () => {
-        Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
+        Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
@@ -50,18 +68,18 @@ const mutations = {
         // 值存在就执行条件
         type.inUser ? query.equalTo('name',type.inUser) : ''
         type.inPassword ? query.equalTo('password',type.inPassword) : ''
-
         query.find({
             success: function(results) {
-                
                 // 登录 判断 用户名存在 和 登录成功
               if(type.inUser != undefined && results.length > 0){
                 results[0].attributes.name == type.inUser ? state.err = true : ''
                 if(results[0].attributes.password == type.inPassword){
+                    NProgress.start()
                     state.loginBJ = true
                     state.mesState = 'suc'
                     localStorage.setItem('name',results[0].attributes.name)
                     state.mesTitle = `${results[0].attributes.name} , 欢迎您!`
+                    NProgress.done()
                 }
               }else{
                   // login 判断是否有 添加密码
@@ -84,8 +102,10 @@ const mutations = {
             diary.save(null, {
                 success: function(result) {
                     if(result.id && type.upUser && type.upPass){
+                        NProgress.start()
                         state.mesState='suc',state.mesTitle = '注册成功'
                         console.log("创建成功")
+                        NProgress.done()
                     }else{
                         state.mesState='err',state.mesTitle = '注册失败'
                         console.log('失败');
@@ -105,6 +125,35 @@ const mutations = {
     // login 重置 err状态
     errState:(state) => {
         state.err = true
+    },
+    getNews: (state) => {
+        /*
+            newDetail       数据状态
+            @newShow        组件显示
+            @newTitle       文章标题
+            @newConent      文章内容
+            @newComment     文章评论
+            @newTime      文章发表时间
+            @newTag         文章分类
+        */
+            var news = Bmob.Object.extend("news");
+            var query = new Bmob.Query(news);
+            query.get("nzMNdddj", {
+            success: function(result) {
+                state.newShow = true
+                state.newTitle = result.get("title");
+                state.newComent = result.get("content")
+                state.newComment = result.get("comment");
+                state.Time = result.get("time")
+                state.newTag = result.get('newTag')
+                console.log(result.get('newTag'))
+                console.log(result)
+            },
+            error: function(object, error) {
+                state.mesState = 'err',state.mesTitle = '获取失败'
+                state.newShow = false,console.log('获取失败')
+            }
+        });
     }
 }
 
@@ -120,6 +169,11 @@ const actions = {
     signUp: ({commit},type) => {
         commit('login')
         commit('signUp',type)
+    },
+    // 获取文章信息
+    getNews: ({commit},type) => {
+        commit('login')
+        commit('getNews')
     }
 }
 
