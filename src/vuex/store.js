@@ -14,10 +14,10 @@ const state = {
         @newTitle       文章标题
         @newConent      文章内容
         @newComment     文章评论
-        @newTime      文章发表时间
+        @newTime        文章发表时间
         @newTag         文章分类
     */
-    newShow : true,
+    newShow : false,
     newTitle: '',
     newContent: '',
     newComment: '',
@@ -126,7 +126,7 @@ const mutations = {
     errState:(state) => {
         state.err = true
     },
-    getNews: (state) => {
+    getNews: (state,type) => {
         /*
             newDetail       数据状态
             @newShow        组件显示
@@ -138,22 +138,27 @@ const mutations = {
         */
             var news = Bmob.Object.extend("news");
             var query = new Bmob.Query(news);
-            query.get("nzMNdddj", {
+            console.log(type)
+            query.get(type, {
             success: function(result) {
                 state.newShow = true
                 state.newTitle = result.get("title");
                 state.newComent = result.get("content")
                 state.newComment = result.get("comment");
-                state.Time = result.get("time")
+                state.newTime = result.createdAt
                 state.newTag = result.get('newTag')
                 console.log(result.get('newTag'))
-                console.log(result)
+                console.log(result.createdAt)
             },
             error: function(object, error) {
                 state.mesState = 'err',state.mesTitle = '获取失败'
                 state.newShow = false,console.log('获取失败')
             }
         });
+    },
+    //  关闭显示文章组件
+    newClose: (state) => {
+        state.newShow = false
     }
 }
 
@@ -173,7 +178,7 @@ const actions = {
     // 获取文章信息
     getNews: ({commit},type) => {
         commit('login')
-        commit('getNews')
+        commit('getNews',type)
     }
 }
 

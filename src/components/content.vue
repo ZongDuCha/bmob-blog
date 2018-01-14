@@ -14,7 +14,7 @@
       <section class="news-list container">
 
         <div class="zd-md-12 news-item" v-for="(item,index) in getCont" :key="index">
-            <router-link to="">{{item.attributes.title}}</router-link>
+            <a @click="getNews(item.id)">{{item.attributes.title}}</a>
             <p>
                 {{item.attributes.content}}
             </p>
@@ -102,6 +102,9 @@ export default {
                 setInterval(()=>{this.loading=false},1000)
                 NProgress.done()
             })
+        },
+        getNews: function(type){
+            this.$store.dispatch('getNews',type)
         }
     },
     mounted:function(){

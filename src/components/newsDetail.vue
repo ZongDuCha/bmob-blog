@@ -1,7 +1,9 @@
 <template>
-  <div class="news" :class="newShow ? 'animate' : ''">
+  <div class="news" :class="newShow ? 'animate' : ''"
+        @click.stop="newClose($event)">
+
     <div class="news-container">
-        <i class="fa fa-close fa-2x"></i>
+        <i class="fa fa-close fa-2x" @click="newClose($event)"></i>
         <div class="news-title">
             <img src="../assets/logonameimg.png" alt="">
             <h2>{{newTitle}}</h2>
@@ -28,16 +30,34 @@
 
             <li>
                 <i class="fa fa-commenting-o"></i>
-                <span>{{newComment.length}}</span>
+                <span>{{newComment.length || '0'}}</span>
             </li>
         </div>
 
 
         <section>
-            {{newConent}}
+            {{newConent}}123123123123
         </section>
 
         <!-- 评论 -->
+        <div class="new-comments">
+            <p>评论({{newComment.length || '0'}})</p>
+        </div>
+
+        <div class="comment-content">
+            <li v-for="(item,index) in newComment" v-if="newComment" :key="index">
+                <div class="comment-operation">
+                    <div class="comment-name">{{item.name}}</div>
+                    <div class="comment-time">发表时间：{{item.time}}</div>
+                </div>
+
+                <div class="comment-content">{{item.content}}</div>
+            </li>
+
+            <div class="comment-err" v-if="!newComment">
+                (空)
+            </div>
+        </div>
 
         <div class="comment">
             <input type="text">
@@ -51,9 +71,6 @@
 import { store,mapState} from 'vuex'
 export default {
     name: 'NewDetail',
-    created:function(){
-        this.$store.dispatch('getNews')
-    },
     computed:{
         ...mapState([
             'newShow',
@@ -63,20 +80,22 @@ export default {
             'newTime',
             'newTag'
         ])
+    },
+    methods: {
+         newClose: function(e){
+             if(e.target.className != 'news animate' && e.target.className != 'fa fa-close fa-2x') return
+            this.$store.commit('newClose')
+        }
     }
 }
 </script>
 
 <style lang="scss">
-.animate{
-    width:100%;height:100%;
-    animation: show 1s;
-    animation-delay: 1s;
-}
+
 .news{
-    position: relative;transition:.5s;
-    position: fixed;top: 0;bottom:0;left:0;right:0;margin:auto;
-    width:100%;height:100%;display:block;
+    position: relative;transition:.4s;
+    position: fixed;bottom:0;left:0;right:0;margin:auto;
+    width:0%;height:0%;opacity: 0;
     background:rgba(23, 21, 21, 0.74);
 
     .news-container{
@@ -90,8 +109,8 @@ export default {
         margin: auto;
         max-width:100%;max-height:100%;
         background:#fff;
-        width:50%;height:80%;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3607843137254902);
+        width:80%;height:80%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
 
         *{
             color:#353535;
@@ -103,6 +122,7 @@ export default {
             position: absolute;
             right: 15px;
             top: 10px;color:rgb(73, 73, 73);
+            z-index:9;
             &:hover{
                 color:#ff0000;
             }
@@ -114,21 +134,25 @@ export default {
             border-bottom: 1px solid #dedcdc;
 
             img{
-                    float: left;
-                    border-radius: 50%;
-                    max-height: 1.7rem;
-                    margin-right: 10px;
-                    border: 1px solid #ddd;
+                float: left;
+                border-radius: 50%;
+                max-height: 1.7rem;
+                margin-right: 10px;
+                border: 1px solid #ddd;
             }
 
             h2{
                 font-size:20px;
+                width: 90%;
             }
         }
 
         .operation{
-            position: absolute;
-            right: 15px;top:60px;
+            margin-top:5px;
+            @media (min-width:$zd-xs){
+                position: absolute;
+                right: 15px;top:60px;
+            }
 
             li{
                 float: left;
@@ -137,12 +161,20 @@ export default {
 
             *{
                 font-size:18px;
+
+                @media (max-width:1400px){
+                    font-size: 16px;
+                }
             }
         }
 
         section{
             margin-top: 40px;
             text-align: left;
+
+            @media (max-width:$zd-xs){
+                margin-top:10px;
+            }
         }
 
         .comment{
@@ -150,6 +182,10 @@ export default {
             bottom:0;left:0;display: flex;
             width:100%;height:55px;
             box-sizing:border-box;padding:10px 30px;
+
+            @media (max-width:$zd-xs){
+                padding: 10px 20px;
+            }
 
             input{
                 height:100%;border-radius: 5px;
@@ -164,14 +200,59 @@ export default {
 
             button{
                 flex:1;margin-left:20px;border-radius: 5px;border:1px solid rgba(86, 147, 238, 0.79);
-                background:rgb(249, 248, 248);height:100%;cursor:pointer;transition:.3s;color:$color;
+                background:rgb(249, 248, 248);height:100%;
+                cursor:pointer;transition:.3s;color:$color;
+
+                @media (max-width:$zd-xs){
+                    flex:3;
+                }
 
                 &:hover{
                     background:#fff;
                 }
             }
         }
+
+        .new-comments{
+            text-align:left;margin-top:30px;
+            border-bottom:1px solid $color;
+
+            p{
+                color:$color;font-weight: 900;
+            }
+        }
+
+        .comment-content{
+            text-align:left;
+
+            li{
+                margin:10px 0;width:100%;
+                border-bottom:1px dotted #ccc;padding-bottom:20px;
+
+                .comment-name,.comment-time{
+                    display:inline-block;
+                    float:left;margin-right:10px;
+                    font-weight: 900;color:$color;
+                    font-size:15px;
+                }
+
+                .comment-time{
+                    font-size: 13px;
+                    @media (min-width:$zd-xs){
+                        float: right;
+                    }
+                }
+
+                .comment-content{
+                    margin-top:5px;
+                    font-size: 15px;
+                }
+            }
+        }
     }
+}
+.animate{
+    width:100%;height:100%;opacity:1 !important;
 }
 @keyframes show{
     0%{

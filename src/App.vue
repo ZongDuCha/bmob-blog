@@ -37,6 +37,9 @@ a,li{
   list-style: none;
   color:#1c1d1c;text-decoration: none;
 }
+a{
+  cursor: pointer;
+}
 img{
   max-width:100%;
 }
