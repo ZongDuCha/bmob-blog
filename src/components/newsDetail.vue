@@ -35,33 +35,37 @@
         </div>
 
 
-        <section>
+        <div class="overy">
+            <section>
             {{newConent}}123123123123
-        </section>
+            </section>
 
-        <!-- 评论 -->
-        <div class="new-comments">
-            <p>评论({{newComment.length || '0'}})</p>
-        </div>
+            <!-- 评论 -->
+            <div class="new-comments">
+                <p>评论({{newComment.length || '0'}})</p>
+            </div>
 
-        <div class="comment-content">
-            <li v-for="(item,index) in newComment" v-if="newComment" :key="index">
-                <div class="comment-operation">
-                    <div class="comment-name">{{item.name}}</div>
-                    <div class="comment-time">发表时间：{{item.time}}</div>
+            <div class="comment-content">
+                <li v-for="(item,index) in newComment" v-if="newComment" :key="index">
+                    <div class="comment-operation">
+                        <div class="comment-name">{{item.name}}</div>
+                        <div class="comment-time">发表时间：{{item.time}}</div>
+                    </div>
+
+                    <div class="comment-content">{{item.content}}</div>
+                </li>
+
+                <div class="comment-err" v-if="!newComment">
+                    (空)
                 </div>
-
-                <div class="comment-content">{{item.content}}</div>
-            </li>
-
-            <div class="comment-err" v-if="!newComment">
-                (空)
             </div>
         </div>
 
+        
+
         <div class="comment">
-            <input type="text">
-            <button>评论</button>
+            <input type="text" @keyup.enter="setComment($event)" ref="comment">
+            <button @click="setComment($event)"><i class="fa fa-paper-plane fa-2x"></i>评论</button>
         </div>
     </div>
   </div>
@@ -85,6 +89,17 @@ export default {
          newClose: function(e){
              if(e.target.className != 'news animate' && e.target.className != 'fa fa-close fa-2x') return
             this.$store.commit('newClose')
+        },
+        setComment: function(e){
+            var date = new Date()
+            var year = date.getFullYear()
+            var month = date.getMonth()+1
+            var day = date.getDate()
+            var hours = date.getHours()
+            var mins = date.getMinutes()
+            var sec = date.getSeconds()
+            var dqDate = year+'-'+month+'-'+day+" "+hours+':'+mins+':'+sec
+            this.$store.dispatch('setComment',[this.$refs.comment.value,dqDate])
         }
     }
 }
@@ -168,8 +183,13 @@ export default {
             }
         }
 
+        .overy{
+                height: 81%;
+                overflow-y: scroll;
+                margin-top: 50px;
+        }
+
         section{
-            margin-top: 40px;
             text-align: left;
 
             @media (max-width:$zd-xs){
@@ -202,6 +222,12 @@ export default {
                 flex:1;margin-left:20px;border-radius: 5px;border:1px solid rgba(86, 147, 238, 0.79);
                 background:rgb(249, 248, 248);height:100%;
                 cursor:pointer;transition:.3s;color:$color;
+
+                i{
+                    color:$color;
+                    font-size: 14px;
+                    margin-right: 10px;
+                }
 
                 @media (max-width:$zd-xs){
                     flex:3;
@@ -253,13 +279,5 @@ export default {
 }
 .animate{
     width:100%;height:100%;opacity:1 !important;
-}
-@keyframes show{
-    0%{
-        width:0;height:0;display:none;
-    }
-    100%{
-        width:100%;height:100%;display:block;
-    }
 }
 </style>

@@ -41,6 +41,9 @@
 
 <!-- 显示文章组件 -->
 <NewsDetail/>
+
+<!-- 修改文章组件 -->
+<NewsModify/>
 </div>
 </template>
 
@@ -49,6 +52,7 @@ import stroe from 'vuex'
 import NProgress from 'nprogress'
 import { mapState,mapActions} from 'vuex'
 import NewsDetail from './newsDetail'
+import NewsModify from './newsModify'
 export default {
     data(){
         return{
@@ -77,7 +81,7 @@ export default {
             ],
         }
     },
-    components:{ NewsDetail },
+    components:{ NewsDetail,NewsModify },
     methods:{
         ...mapActions([
             'getallState'

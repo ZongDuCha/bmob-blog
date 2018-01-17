@@ -9,6 +9,7 @@ const state = {
     mesState: '',
     mesTitle: '',
     /*
+        newID           文章ID
         newDetail       数据状态
         @newShow        组件显示
         @newTitle       文章标题
@@ -17,6 +18,7 @@ const state = {
         @newTime        文章发表时间
         @newTag         文章分类
     */
+    newID : '',
     newShow : false,
     newTitle: '',
     newContent: '',
@@ -43,7 +45,7 @@ const mutations = {
         NProgress.done()
     },
     login: () => {
-        Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
+        Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
@@ -128,6 +130,7 @@ const mutations = {
     },
     getNews: (state,type) => {
         /*
+            newID           文章ID
             newDetail       数据状态
             @newShow        组件显示
             @newTitle       文章标题
@@ -138,21 +141,45 @@ const mutations = {
         */
             var news = Bmob.Object.extend("news");
             var query = new Bmob.Query(news);
-            console.log(type)
             query.get(type, {
             success: function(result) {
                 state.newShow = true
+                state.newID = result.id;
                 state.newTitle = result.get("title");
-                state.newComent = result.get("content")
+                state.newComent = result.get("content");
                 state.newComment = result.get("comment");
-                state.newTime = result.createdAt
-                state.newTag = result.get('newTag')
-                console.log(result.get('newTag'))
-                console.log(result.createdAt)
+                state.newTime = result.createdAt;
+                state.newTag = result.get('newTag');
+                console.log(result.get('newTag'));
             },
             error: function(object, error) {
                 state.mesState = 'err',state.mesTitle = '获取失败'
                 state.newShow = false,console.log('获取失败')
+            }
+        });
+    },
+    // newsDetail 评论
+    setComment: (state,type) => {
+        state.mesState = state.mesTitle =  ''
+        if (!type[0]) alert('不能为空');
+        if (state.loginBJ) state.mesState = 'err';state.mesTitle="未登录";state.loginBJ = true;return;
+        if (!state.newID) state.mesState = 'err',state.mesTitle="评论失败";return;
+        
+        var Diary = Bmob.Object.extend("news");
+        var query = new Bmob.Query(Diary);
+        query.get(state.newID, {
+            success: function(result) {
+                var obj  = {
+                    "name": localStorage.getItem('name'),
+                    "time": type[1],
+                    "content": type[0]
+                }
+                result.addUnique('comment', obj);
+                result.save();
+                if(result) state.mesState = 'suc';state.mesTitle = '评论成功'
+            },
+            error: function(object, error) {
+                state.mesState = 'err',state.mesTitle="评论失败";
             }
         });
     },
@@ -179,6 +206,9 @@ const actions = {
     getNews: ({commit},type) => {
         commit('login')
         commit('getNews',type)
+    },
+    setComment: ({commit},type) => {
+        commit('setComment',type)
     }
 }
 
