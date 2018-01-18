@@ -86,7 +86,7 @@ export default {
         ])
     },
     methods: {
-         newClose: function(e){
+        newClose: function(e){
              if(e.target.className != 'news animate' && e.target.className != 'fa fa-close fa-2x') return
             this.$store.commit('newClose')
         },

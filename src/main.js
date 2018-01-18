@@ -8,12 +8,8 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import 'font-awesome/css/font-awesome.css'
 import 'font-awesome-animation/dist/font-awesome-animation.css'
-import Quill from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
 
-Vue.use(NProgress,Quill)
+Vue.use(NProgress)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new  */

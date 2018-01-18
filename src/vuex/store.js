@@ -25,6 +25,15 @@ const state = {
     newComment: '',
     newTime: '',
     newTag: '',
+    /**
+     *  newModID           编辑文章ID
+     *  newModTitle        编辑文章标题
+     *  newModContent      编辑文章内容
+     */
+    newModId : '',
+    newModShow : false,
+    newModTitle : '',
+    newModContent : '',
     // login 状态
     err: true,
     loginBJ: false,
@@ -160,9 +169,9 @@ const mutations = {
     },
     // newsDetail 评论
     setComment: (state,type) => {
-        state.mesState = state.mesTitle =  ''
+        state.mesState = state.mesTitle =  ' ';
         if (!type[0]) alert('不能为空');
-        if (state.loginBJ) state.mesState = 'err';state.mesTitle="未登录";state.loginBJ = true;return;
+        if (state.loginBJ) state.mesState = 'err';state.mesTitle="未登录";state.loginBJ = true;setInterval(function(){location.reload(false);},2000);return;
         if (!state.newID) state.mesState = 'err',state.mesTitle="评论失败";return;
         
         var Diary = Bmob.Object.extend("news");
@@ -186,6 +195,25 @@ const mutations = {
     //  关闭显示文章组件
     newClose: (state) => {
         state.newShow = false
+    },
+    editMod: (state,type) => {
+        state.mesState = state.mesTitle = ' ';
+        var Diary = Bmob.Object.extend("news");
+        var query = new Bmob.Query(Diary);
+        query.get('fqTdDDDU', {
+            success: function(result) {
+                result.set('title', type[0]);
+                result.set('content', type[1]);
+                result.save();
+                state.mesState= 'suc';state.mesTitle = 'ok'
+            },
+            error: function(object, error) {
+                state.mesState='err';state.mesTitle='错误'
+            }
+        });
+    },
+    newModClose: (state) => {
+        state.newModShow = true
     }
 }
 
@@ -209,6 +237,11 @@ const actions = {
     },
     setComment: ({commit},type) => {
         commit('setComment',type)
+    },
+    // 编辑文章
+    editMod: ({commit},type) => {
+        commit('login')
+        commit('editMod',type)
     }
 }
 
