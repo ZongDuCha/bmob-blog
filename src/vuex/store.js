@@ -32,8 +32,8 @@ const state = {
      */
     newModId : '',
     newModShow : false,
-    newModTitle : '',
-    newModContent : '',
+    newModTitle : 'qwe',
+    newModContent : '<h1>123</h1>',
     // login 状态
     err: true,
     loginBJ: false,
@@ -54,7 +54,7 @@ const mutations = {
         NProgress.done()
     },
     login: () => {
-        Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
+        Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
@@ -196,16 +196,33 @@ const mutations = {
     newClose: (state) => {
         state.newShow = false
     },
+    /**
+     *  newModID           编辑文章ID
+     *  newModTitle        编辑文章标题
+     *  newModContent      编辑文章内容
+     */
     editMod: (state,type) => {
-        state.mesState = state.mesTitle = ' ';
+        if (!state.newModId) state.mesState='err';state.mesTitle='错误'
+        state.mesState = state.mesTitle = '';
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
-        query.get('fqTdDDDU', {
+        console.log(type)
+        query.get(state.newModId, {
             success: function(result) {
+                for(let i in state.getCont){
+                    if(state.getCont[i].id == state.newModId){
+                        console.log('ok')
+                        state.getCont[i].attributes.title = type[0]
+                        state.getCont[i].attributes.content = type[1]
+                    }
+                }
+                console.log(state.getCont)
                 result.set('title', type[0]);
                 result.set('content', type[1]);
                 result.save();
                 state.mesState= 'suc';state.mesTitle = 'ok'
+                state.newModShow = false
+                
             },
             error: function(object, error) {
                 state.mesState='err';state.mesTitle='错误'
@@ -213,6 +230,12 @@ const mutations = {
         });
     },
     newModClose: (state) => {
+        state.newModShow = false
+    },
+    newModShow: (state,type) => {
+        state.newModId = type[0]
+        state.newModTitle = type[1]
+        state.newModContent = type[2]
         state.newModShow = true
     }
 }
@@ -242,6 +265,9 @@ const actions = {
     editMod: ({commit},type) => {
         commit('login')
         commit('editMod',type)
+    },
+    newModShow: ({commit},type) => {
+        commit('newModShow',type)
     }
 }
 

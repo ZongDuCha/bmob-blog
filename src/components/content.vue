@@ -15,17 +15,15 @@
 
         <div class="zd-md-12 news-item" v-for="(item,index) in getCont" :key="index">
             <a @click="getNews(item.id)">{{item.attributes.title}}</a>
-            <p>
-                {{item.attributes.content}}
-            </p>
+            <p v-if="item.attributes.content" v-html="item.attributes.content.replace(/<\/?[^>]*>/g, '')"></p>
             <div class="me-tag">
                 <a @click="className = tag;getcontent();" v-for="(tag,index) in item.attributes.newTag" :key="index">{{tag}}</a>
             </div>
             <div class="news-time" v-if="item.createdAt"><span>发布时间：{{item.createdAt}}</span></div>
 
             <div class="operation">
-                <i class="fa fa-trash faa-wrench animated-hover" alt="删除" title="删除"></i>
-                <i class="fa fa-wpforms faa-wrench animated-hover"  alt="删除" title="删除"></i>
+                <i class="fa fa-trash faa-wrench animated-hover"  alt="删除" title="删除"></i>
+                <i class="fa fa-wpforms faa-wrench animated-hover" @click="newModShow([item.id,item.attributes.title,item.attributes.content])"  alt="修改" title="修改"></i>
             </div>
         </div>
     </section>
@@ -109,6 +107,9 @@ export default {
         },
         getNews: function(type){
             this.$store.dispatch('getNews',type)
+        },
+        newModShow: function(type){
+            this.$store.commit('newModShow',type)
         }
     },
     mounted:function(){
@@ -229,10 +230,10 @@ export default {
         }
         .operation{
             display: inline;
+            text-align:right;
             i{
                     font-size: 22px;
                     color: rgb(111, 122, 169);
-                    float: right;
                     cursor: pointer;
                     margin-left: 20px;
             }

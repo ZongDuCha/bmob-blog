@@ -8,7 +8,7 @@
 ## install dependencies
 npm install
 
-## serve with hot reload at localhost:8080
+## serve with hot reload at localhost:8081
 npm run dev
 ```
 
@@ -48,7 +48,7 @@ npm run dev
 
 [✔] 首页文章显示
 
-[✔] 自制 `首页简洁无限刷新数据`
+[✔] 自制 `首页底部滚动 无限刷新数据`
 
 [✔] Tab 切换文章分类
 
@@ -62,13 +62,15 @@ npm run dev
 
 [✔] 修改文章
 
+[✔] 编辑文章
+
+后续：
+
 [✖] 发表文章
 
 [✖] 编辑个人信息
 
 [✖] 头像更换
-
-[✖] 
 
 
 

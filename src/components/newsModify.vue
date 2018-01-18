@@ -1,5 +1,5 @@
 <template>
-  <div class="newsModify" :class="!newModShow ? 'newsModify-animate' : ''" @click="newModClose($event)">
+  <div class="newsModify" :class="newModShow ? 'newsModify-animate' : ''" @click="newModClose($event)">
       <div class="news-mod">
         <i class="fa fa-close fa-2x" @click="newModClose($event)"></i>
           <div class="news-title">
@@ -8,13 +8,15 @@
         </div>
           
           <div class="opacmod">
-            <input type="text" placeholder="标题" ref="modTitle">
+            <input type="text" placeholder="标题" ref="modTitle" v-model="newModTitle">
             <div id="editorElem" style="text-align:left"></div>
             <div class="operation">
                 <button @click="delContent">清空内容</button>
                 <button @click="setContent">确定修改</button>
             </div>
           </div>
+          {{newModTitle}}
+          {{newModContent}}
       </div>
   </div>
 </template>
@@ -27,19 +29,23 @@ export default {
     data () {
       return {
         editorContent: '',
-        loadText: '<h1>123</h1>'
+        loadText: '<h1>123</h1>',
       }
     },
     computed:{
       ...mapState([
-        'newModShow'
+        'newModShow',
+        'newModTitle',
+        'newModContent'
       ])
     },
     methods: {
+      // 关闭显示
       newModClose: function(e){
           if(e.target.className != 'newsModify newsModify-animate' && e.target.className != 'fa fa-close fa-2x') return
           this.$store.commit('newModClose')
       },
+      // 发送
       setContent: function () { 
           this.$store.dispatch('editMod',[this.$refs.modTitle.value,this.editorContent])
           var editor = new E('#editorElem')
@@ -50,6 +56,7 @@ export default {
           editor.txt.html(this.editorContent = this.loadText = '')
           this.$refs.modTitle.value = ''
       },
+      // 清空
       delContent: function () {
         var editor = new E('#editorElem')
         editor.customConfig.onchange = (html) => {
@@ -57,12 +64,23 @@ export default {
         }
         editor.create()
         editor.txt.html(this.editorContent = this.loadText = '')
-        }
+      }
     },
+    // 监听属性的变化
+    watch:{
+      newModContent(){
+        var editor = new E('#editorElem')
+        editor.create()
+        editor.txt.html(this.editorContent = this.loadText = this.newModContent)
+      },
+      deep:true
+    },
+    // 初始化
     mounted() {
       var editor = new E('#editorElem')
       editor.create()
-      editor.txt.html(this.editorContent = this.loadText)
+      editor.txt.html(this.editorContent = this.loadText = this.newModContent)
+      this.$refs.modTitle.value = this.newModTitle
     }
 }
 </script>
@@ -92,7 +110,7 @@ export default {
             color:#353535;
         }
 
-                .fa-close{
+        .fa-close{
             cursor: pointer;
             transition:.3s;
             position: absolute;

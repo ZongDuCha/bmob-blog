@@ -52,7 +52,7 @@
                         <div class="comment-time">发表时间：{{item.time}}</div>
                     </div>
 
-                    <div class="comment-content">{{item.content}}</div>
+                    <div class="comment-content" v-html="item.content" v-if="item.content"></div>
                 </li>
 
                 <div class="comment-err" v-if="!newComment">
@@ -108,7 +108,7 @@ export default {
 <style lang="scss">
 
 .news{
-    position: relative;transition:.4s;
+    position: relative;transition:.1s;
     position: fixed;bottom:0;left:0;right:0;margin:auto;
     width:0%;height:0%;opacity: 0;
     background:rgba(23, 21, 21, 0.74);
@@ -208,9 +208,9 @@ export default {
             }
 
             input{
-                height:100%;border-radius: 5px;
+                height:100%;border-radius: 5px;box-sizing:border-box;
                 border:1px solid #ccc;    font-size: 16px;
-                transition:.5s;outline:none;
+                transition:.5s;outline:none;padding:10px;
                 width:80%;flex:10;color:$color;
                 &:focus{
                     border:1px solid rgba(86, 147, 238, 0.79);;
@@ -257,7 +257,7 @@ export default {
 
                 .comment-name,.comment-time{
                     display:inline-block;
-                    float:left;margin-right:10px;
+                    margin-right:10px;
                     font-weight: 900;color:$color;
                     font-size:15px;
                 }
