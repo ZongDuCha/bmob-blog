@@ -100,6 +100,7 @@ export default {
             var sec = date.getSeconds()
             var dqDate = year+'-'+month+'-'+day+" "+hours+':'+mins+':'+sec
             this.$store.dispatch('setComment',[this.$refs.comment.value,dqDate])
+            this.$refs.comment.value = ''
         }
     }
 }
@@ -112,6 +113,16 @@ export default {
     position: fixed;bottom:0;left:0;right:0;margin:auto;
     width:0%;height:0%;opacity: 0;
     background:rgba(23, 21, 21, 0.74);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 
     .news-container{
         position: relative;

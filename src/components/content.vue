@@ -22,7 +22,7 @@
             <div class="news-time" v-if="item.createdAt"><span>发布时间：{{item.createdAt}}</span></div>
 
             <div class="operation">
-                <i class="fa fa-trash faa-wrench animated-hover"  alt="删除" title="删除"></i>
+                <i class="fa fa-trash faa-wrench animated-hover"  alt="删除" title="删除" @click='removeNew(item.id)'></i>
                 <i class="fa fa-wpforms faa-wrench animated-hover" @click="newModShow([item.id,item.attributes.title,item.attributes.content])"  alt="修改" title="修改"></i>
             </div>
         </div>
@@ -108,8 +108,13 @@ export default {
         getNews: function(type){
             this.$store.dispatch('getNews',type)
         },
+        // 显示修改文章
         newModShow: function(type){
             this.$store.commit('newModShow',type)
+        },
+        // 删除文章
+        removeNew: function(type){
+            this.$store.dispatch('removeNew',type)
         }
     },
     mounted:function(){

@@ -38,7 +38,8 @@ export default {
         return{
             // 控制小屏下的侧边导航栏
             left: false,
-            name: localStorage.getItem('name')
+            name: localStorage.getItem('name'),
+            nameImg: ''
         }
     },
     methods:{
@@ -218,10 +219,10 @@ export default {
 }
 @-webkit-keyframes nameimg{
     0%{
-        transform: rotate(0deg);
+        transform: rotateZ(0deg);
     }
     100%{
-        transform:rotate(360deg);
+        transform:rotateZ(360deg);
     }
 }
 </style>

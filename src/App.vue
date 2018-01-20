@@ -31,7 +31,7 @@ export default {
   padding:0;margin:0;outline: none;
 }
 body{
-  background:#eaeaea;
+  background:#f7f7f7;
 }
 a,li{
   list-style: none;
@@ -46,4 +46,7 @@ img{
 #app {
     margin-bottom: 0;text-align:center;
 }
+::selection { background:rgb(58, 247, 90); color:#fff; } 
+::-moz-selection { background:rgb(58, 247, 90); color:#fff; } 
+::-webkit-selection { background:rgb(58, 247, 90); color:#fff; }
 </style>

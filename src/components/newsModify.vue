@@ -8,15 +8,13 @@
         </div>
           
           <div class="opacmod">
-            <input type="text" placeholder="标题" ref="modTitle" v-model="newModTitle">
+            <input type="text" placeholder="标题" ref="modTitle" v-model="editorTitle">
             <div id="editorElem" style="text-align:left"></div>
             <div class="operation">
                 <button @click="delContent">清空内容</button>
                 <button @click="setContent">确定修改</button>
             </div>
           </div>
-          {{newModTitle}}
-          {{newModContent}}
       </div>
   </div>
 </template>
@@ -29,7 +27,8 @@ export default {
     data () {
       return {
         editorContent: '',
-        loadText: '<h1>123</h1>',
+        loadText: '',
+        editorTitle: this.$store.state.newModTitle
       }
     },
     computed:{
@@ -47,31 +46,34 @@ export default {
       },
       // 发送
       setContent: function () { 
-          this.$store.dispatch('editMod',[this.$refs.modTitle.value,this.editorContent])
+          console.log(this.editorContent)
           var editor = new E('#editorElem')
           editor.customConfig.onchange = (html) => {
             this.editorContent = html
           }
           editor.create()
+          this.$store.dispatch('editMod',[this.$refs.modTitle.value,this.editorContent])
           editor.txt.html(this.editorContent = this.loadText = '')
           this.$refs.modTitle.value = ''
       },
       // 清空
       delContent: function () {
-        var editor = new E('#editorElem')
-        editor.customConfig.onchange = (html) => {
-          this.editorContent = html
-        }
-        editor.create()
-        editor.txt.html(this.editorContent = this.loadText = '')
+        this.$store.commit('clearNewMod')
+        this.$refs.modTitle.value = ''
       }
     },
     // 监听属性的变化
     watch:{
       newModContent(){
         var editor = new E('#editorElem')
+        editor.customConfig.onchange = (html) => {
+          this.editorContent = html
+        }
         editor.create()
         editor.txt.html(this.editorContent = this.loadText = this.newModContent)
+      },
+      newModTitle(){
+        this.editorTitle = this.$store.state.newModTitle
       },
       deep:true
     },
@@ -91,6 +93,16 @@ export default {
     position: fixed;bottom:0;left:0;right:0;margin:auto;
     width:0%;height:0%;opacity: 0;
     background:rgba(23, 21, 21, 0.74);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 
     .news-mod{
         position: relative;

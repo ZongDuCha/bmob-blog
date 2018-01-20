@@ -32,8 +32,11 @@ const state = {
      */
     newModId : '',
     newModShow : false,
-    newModTitle : 'qwe',
-    newModContent : '<h1>123</h1>',
+    newModTitle : '',
+    newModContent : '',
+    // about
+    aboutContent: '<h1>我的博客</h1>',
+    aboutID: '',
     // login 状态
     err: true,
     loginBJ: false,
@@ -157,9 +160,9 @@ const mutations = {
                 state.newTitle = result.get("title");
                 state.newComent = result.get("content");
                 state.newComment = result.get("comment");
+                state.newComment = state.newComment.reverse();
                 state.newTime = result.createdAt;
                 state.newTag = result.get('newTag');
-                console.log(result.get('newTag'));
             },
             error: function(object, error) {
                 state.mesState = 'err',state.mesTitle = '获取失败'
@@ -169,11 +172,14 @@ const mutations = {
     },
     // newsDetail 评论
     setComment: (state,type) => {
-        state.mesState = state.mesTitle =  ' ';
+        state.mesState = state.mesTitle =  '';
         if (!type[0]) alert('不能为空');
-        if (state.loginBJ) state.mesState = 'err';state.mesTitle="未登录";state.loginBJ = true;setInterval(function(){location.reload(false);},2000);return;
-        if (!state.newID) state.mesState = 'err',state.mesTitle="评论失败";return;
-        
+        if(!state.loginBJ){
+            state.mesState = 'err',
+            state.mesTitle="未登录";
+            state.loginBJ=true;
+            setTimeout(function(){location.reload(false)},2000);
+        }
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
         query.get(state.newID, {
@@ -185,6 +191,7 @@ const mutations = {
                 }
                 result.addUnique('comment', obj);
                 result.save();
+                state.newComment = result.attributes.comment
                 if(result) state.mesState = 'suc';state.mesTitle = '评论成功'
             },
             error: function(object, error) {
@@ -206,21 +213,18 @@ const mutations = {
         state.mesState = state.mesTitle = '';
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
-        console.log(type)
         query.get(state.newModId, {
             success: function(result) {
                 for(let i in state.getCont){
                     if(state.getCont[i].id == state.newModId){
-                        console.log('ok')
                         state.getCont[i].attributes.title = type[0]
                         state.getCont[i].attributes.content = type[1]
                     }
                 }
-                console.log(state.getCont)
                 result.set('title', type[0]);
                 result.set('content', type[1]);
                 result.save();
-                state.mesState= 'suc';state.mesTitle = 'ok'
+                state.mesState= 'suc';state.mesTitle = '编辑成功'
                 state.newModShow = false
                 
             },
@@ -237,6 +241,78 @@ const mutations = {
         state.newModTitle = type[1]
         state.newModContent = type[2]
         state.newModShow = true
+    },
+    // 清空 文章修改内容
+    clearNewMod: (state) => {
+        state.newModContent = ' '
+    },
+    removeNew: (state,type) => {
+        if (!type) return
+        state.mesState = state.mesTitle = '';
+        var Diary = Bmob.Object.extend("news");
+        var query = new Bmob.Query(Diary);
+        query.get(type, {
+          success: function(object) {
+            // The object was retrieved successfully.
+            object.destroy({
+              success: function(deleteObject) {
+                state.mesState = 'suc',state.mesTitle = '删除成功'
+                console.log('删除成功');
+                for(let i in state.getCont){
+                    if(state.getCont[i].id == deleteObject.id){
+                        state.getCont.splice(i,1)
+                    }
+                }
+              },
+              error: function(object, error) {
+                state.mesState = 'err',state.mesTitle = '删除失败'
+                console.log('删除失败');
+              }
+            });
+          },
+          error: function(object, error) {
+            state.mesState = 'err',state.mesTitle = '删除失败'
+            console.log("query object fail");
+          }
+        });
+    },
+    getAboutCont: (state) => {
+        var Diary = Bmob.Object.extend("about");
+        var query = new Bmob.Query(Diary);
+        // 查询所有数据
+        query.find({
+        success: function(results) {
+            console.log("共查询到 " + results.length + " 条记录");
+            // 循环处理查询到的数据
+            for (var i = 0; i < results.length; i++) {
+                var object = results[i];
+                state.aboutID = object.id
+                state.aboutContent = object.attributes.aboutContent
+                console.log(state.aboutID)
+            }
+        },
+        error: function(error) {
+            console.log("查询失败: " + error.code + " " + error.message);
+        }
+        });
+    },
+    setAboutCont: (state,type) => {
+        console.log(type)
+
+        var Diary = Bmob.Object.extend("about");
+        var query = new Bmob.Query(Diary);
+        console.log(state.aboutID)
+        query.get(state.aboutID, {
+            success: function(result) {
+                result.set('aboutContent', type);
+                result.save();
+                state.mesState= 'suc';state.mesTitle = '编辑成功'
+                console.log(result)
+            },
+            error: function(object, error) {
+                state.mesState='err';state.mesTitle='错误'
+            }
+        });
     }
 }
 
@@ -268,6 +344,19 @@ const actions = {
     },
     newModShow: ({commit},type) => {
         commit('newModShow',type)
+    },
+    // 删除文章
+    removeNew: ({commit},type) => {
+        commit('removeNew',type)
+    },
+    getAboutCont: ({commit}) => {
+        commit('login')
+        commit('getAboutCont')
+    },
+    // 修改about内容
+    setAboutCont: ({commit},type) => {
+        commit('login')
+        commit('setAboutCont')
     }
 }
 
