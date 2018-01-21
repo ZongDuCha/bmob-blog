@@ -127,7 +127,7 @@ export default {
             // 整个文档 的高度
             let bodyCiHeight = document.body.clientHeight
 
-            if(bodyTop + winHeight >= bodyCiHeight-50) this.getcontent()
+            if(bodyTop + winHeight >= bodyCiHeight-50 && this.$route.path == '/') this.getcontent()
         });
     },
     created(){
@@ -163,6 +163,7 @@ export default {
         transition: .5s;
         margin: 10px;
         display: inline-block;
+        box-shadow: 0 2px 5px #ddd;
 
         &:hover{
             background:$color;

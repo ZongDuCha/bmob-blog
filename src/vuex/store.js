@@ -35,7 +35,7 @@ const state = {
     newModTitle : '',
     newModContent : '',
     // about
-    aboutContent: '<h1>我的博客</h1>',
+    aboutContent: '',
     aboutID: '',
     // login 状态
     err: true,
@@ -57,7 +57,7 @@ const mutations = {
         NProgress.done()
     },
     login: () => {
-        Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
+        Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
@@ -87,6 +87,7 @@ const mutations = {
                 // 登录 判断 用户名存在 和 登录成功
               if(type.inUser != undefined && results.length > 0){
                 results[0].attributes.name == type.inUser ? state.err = true : ''
+
                 if(results[0].attributes.password == type.inPassword){
                     NProgress.start()
                     state.loginBJ = true
@@ -95,13 +96,18 @@ const mutations = {
                     state.mesTitle = `${results[0].attributes.name} , 欢迎您!`
                     NProgress.done()
                 }
+
               }else{
                   // login 判断是否有 添加密码
-                  type.inPassword ? (state.mesState='err',state.mesTitle = '登录失败') : state.err = false
+                  type.inPassword 
+                    ? (state.mesState='err',state.mesTitle = '登录失败') 
+                    : state.err = false
               }
             },
             error: function(error) {
-                type.inPassword ? (state.mesState='err',state.mesTitle = '登录失败') : state.err = false
+                type.inPassword 
+                ? (state.mesState='err',state.mesTitle = '登录失败') 
+                : state.err = false
             }
           });
     },
@@ -151,6 +157,7 @@ const mutations = {
             @newTime      文章发表时间
             @newTag         文章分类
         */
+            NProgress.start()
             var news = Bmob.Object.extend("news");
             var query = new Bmob.Query(news);
             query.get(type, {
@@ -159,10 +166,10 @@ const mutations = {
                 state.newID = result.id;
                 state.newTitle = result.get("title");
                 state.newComent = result.get("content");
-                state.newComment = result.get("comment");
-                state.newComment = state.newComment.reverse();
+                state.newComment = result.get("comment").reverse();
                 state.newTime = result.createdAt;
                 state.newTag = result.get('newTag');
+                NProgress.done()
             },
             error: function(object, error) {
                 state.mesState = 'err',state.mesTitle = '获取失败'
@@ -180,6 +187,7 @@ const mutations = {
             state.loginBJ=true;
             setTimeout(function(){location.reload(false)},2000);
         }
+        NProgress.start()
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
         query.get(state.newID, {
@@ -191,8 +199,9 @@ const mutations = {
                 }
                 result.addUnique('comment', obj);
                 result.save();
-                state.newComment = result.attributes.comment
+                state.newComment = result.attributes.comment.reverse()
                 if(result) state.mesState = 'suc';state.mesTitle = '评论成功'
+                NProgress.done()
             },
             error: function(object, error) {
                 state.mesState = 'err',state.mesTitle="评论失败";
@@ -210,6 +219,7 @@ const mutations = {
      */
     editMod: (state,type) => {
         if (!state.newModId) state.mesState='err';state.mesTitle='错误'
+        NProgress.start()
         state.mesState = state.mesTitle = '';
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
@@ -226,7 +236,7 @@ const mutations = {
                 result.save();
                 state.mesState= 'suc';state.mesTitle = '编辑成功'
                 state.newModShow = false
-                
+                NProgress.done()
             },
             error: function(object, error) {
                 state.mesState='err';state.mesTitle='错误'
@@ -248,6 +258,7 @@ const mutations = {
     },
     removeNew: (state,type) => {
         if (!type) return
+        NProgress.start()
         state.mesState = state.mesTitle = '';
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
@@ -256,27 +267,29 @@ const mutations = {
             // The object was retrieved successfully.
             object.destroy({
               success: function(deleteObject) {
-                state.mesState = 'suc',state.mesTitle = '删除成功'
-                console.log('删除成功');
                 for(let i in state.getCont){
                     if(state.getCont[i].id == deleteObject.id){
                         state.getCont.splice(i,1)
                     }
                 }
+                state.mesState = 'suc',state.mesTitle = '删除成功'
+                console.log('删除成功');
+                NProgress.done()
               },
               error: function(object, error) {
                 state.mesState = 'err',state.mesTitle = '删除失败'
-                console.log('删除失败');
+                error ? console.log('删除失败') : '';
               }
             });
           },
           error: function(object, error) {
             state.mesState = 'err',state.mesTitle = '删除失败'
-            console.log("query object fail");
+            error ? console.log("query object fail") : '';
           }
         });
     },
     getAboutCont: (state) => {
+        NProgress.start()
         var Diary = Bmob.Object.extend("about");
         var query = new Bmob.Query(Diary);
         // 查询所有数据
@@ -288,7 +301,7 @@ const mutations = {
                 var object = results[i];
                 state.aboutID = object.id
                 state.aboutContent = object.attributes.aboutContent
-                console.log(state.aboutID)
+                NProgress.done()
             }
         },
         error: function(error) {
@@ -296,18 +309,19 @@ const mutations = {
         }
         });
     },
+    // 修改about
     setAboutCont: (state,type) => {
-        console.log(type)
-
+        state.mesState= '';state.mesTitle = '';
+        NProgress.start()
         var Diary = Bmob.Object.extend("about");
         var query = new Bmob.Query(Diary);
-        console.log(state.aboutID)
         query.get(state.aboutID, {
             success: function(result) {
                 result.set('aboutContent', type);
                 result.save();
-                state.mesState= 'suc';state.mesTitle = '编辑成功'
-                console.log(result)
+                state.aboutContent = type
+                state.mesState= 'suc';state.mesTitle = '修改成功'
+                Nprogress.done()
             },
             error: function(object, error) {
                 state.mesState='err';state.mesTitle='错误'
@@ -354,9 +368,10 @@ const actions = {
         commit('getAboutCont')
     },
     // 修改about内容
-    setAboutCont: ({commit},type) => {
+    setAboutCont: ({commit},type,state) => {
+        
         commit('login')
-        commit('setAboutCont')
+        commit('setAboutCont',type)
     }
 }
 

@@ -74,6 +74,11 @@ npm run dev
 
 [✖] 头像更换
 
+[✖] 文章点赞
+
+
+
+2018 - 1 - 21
 
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -5,7 +5,7 @@
           1
       </div>
 
-     <div class="editSec"  v-show="!editShow">
+     <div class="editSec" v-show="!editShow">
          <div id="editorEleml" style="text-align:left" ></div>
          <span class="edit-suc" @click="setAboutCont();editShow = true">确定</span>
      </div>
@@ -39,38 +39,33 @@ export default {
         },
         // 确定
         setAboutCont: function(){
-            var editorl = new E('#editorEleml')
-            editorl.customConfig.onchange = (html) => {
-                this.preCont = html
-                console.log(1)
-            }
-            editorl.create()
-            console.log(this.preCont)
             this.$store.dispatch('setAboutCont',this.preCont)
         },
         // 点击编辑
         edit: function(){
-            console.log(this.aboutContent)
+            var _this = this
+            this.$store.dispatch('getAboutCont')
             var editorl = new E('#editorEleml')
+            editorl.customConfig.onchange = function (html) {
+                _this.preCont = html
+            }
             editorl.create()
             editorl.txt.html(this.aboutContent)
         }
     },
     watch:{
         aboutContent: function(){
-            console.log(2)
-            // this.preCont = this.aboutContent
+            this.preCont = this.aboutContent
         }
     },
     mounted(){
         this.$store.dispatch('getAboutCont')
+        var _this = this
         var editorl = new E('#editorEleml')
-        editorl.customConfig.onchange = (html) => {
-            this.preCont = html
-            console.log(3)
+        editorl.customConfig.onchange = function (html) {
+            _this.preCont = html
         }
         editorl.create()
-        editorl.txt.html(this.aboutContent)
     }
 }
 </script>
