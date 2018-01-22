@@ -77,6 +77,7 @@ wangEditor
 [✖] 文章点赞
 
 ![首页访问登录](static//bmob-1.gif)
+![文章](static//bmob-2.gif)
 （录的有点卡）
 
 2018 - 1 - 21
