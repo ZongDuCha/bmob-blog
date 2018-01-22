@@ -17,6 +17,7 @@ const state = {
         @newComment     文章评论
         @newTime        文章发表时间
         @newTag         文章分类
+        @newGood
     */
     newID : '',
     newShow : false,
@@ -25,6 +26,7 @@ const state = {
     newComment: '',
     newTime: '',
     newTag: '',
+    newGood: '',
     /**
      *  newModID           编辑文章ID
      *  newModTitle        编辑文章标题
@@ -57,7 +59,7 @@ const mutations = {
         NProgress.done()
     },
     login: () => {
-        Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
+        Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
@@ -154,8 +156,9 @@ const mutations = {
             @newTitle       文章标题
             @newConent      文章内容
             @newComment     文章评论
-            @newTime      文章发表时间
+            @newTime        文章发表时间
             @newTag         文章分类
+            @newGood        文章点攒数
         */
             NProgress.start()
             var news = Bmob.Object.extend("news");
@@ -169,6 +172,7 @@ const mutations = {
                 state.newComment = result.get("comment").reverse();
                 state.newTime = result.createdAt;
                 state.newTag = result.get('newTag');
+                state.newGood = result.get('newGood')
                 NProgress.done()
             },
             error: function(object, error) {
@@ -243,6 +247,22 @@ const mutations = {
             }
         });
     },
+    // 文章点赞
+    addNewGood: (state) => {
+        state.newGood = !state.newGood
+        var Diary = Bmob.Object.extend("news");
+        var query = new Bmob.Query(Diary);
+        query.get(state.newModId, {
+            success: function(result) {
+                result.set('newGood',false);
+                console.log(state.newGood)
+                result.save();
+            },
+            error: function(object, error) {
+                state.mesState='err';state.mesTitle='错误'
+            }
+        });
+    },
     newModClose: (state) => {
         state.newModShow = false
     },
@@ -288,6 +308,7 @@ const mutations = {
           }
         });
     },
+    // 获取about
     getAboutCont: (state) => {
         NProgress.start()
         var Diary = Bmob.Object.extend("about");
@@ -312,7 +333,6 @@ const mutations = {
     // 修改about
     setAboutCont: (state,type) => {
         state.mesState= '';state.mesTitle = '';
-        NProgress.start()
         var Diary = Bmob.Object.extend("about");
         var query = new Bmob.Query(Diary);
         query.get(state.aboutID, {
@@ -321,7 +341,6 @@ const mutations = {
                 result.save();
                 state.aboutContent = type
                 state.mesState= 'suc';state.mesTitle = '修改成功'
-                Nprogress.done()
             },
             error: function(object, error) {
                 state.mesState='err';state.mesTitle='错误'
@@ -350,6 +369,11 @@ const actions = {
     },
     setComment: ({commit},type) => {
         commit('setComment',type)
+    },
+    // 文章点赞
+    addNewGood: ({commit}) => {
+        commit('login')
+        commit('addNewGood')
     },
     // 编辑文章
     editMod: ({commit},type) => {

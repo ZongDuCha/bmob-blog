@@ -16,23 +16,23 @@ npm run dev
 ```
 ## Maybe you need these
 
-`Sass`
+Sass
 
-`NProgress`
+NProgress
 
-`Vuex`
+Vuex
 
-`Vue-Router`
+Vue-Router
 
-`ES6`
+ES6
 
-`sass-resources-loader`
+sass-resources-loader
 
-`font-awesome`
+font-awesome
 
-`font-awesome-animation`
+font-awesome-animation
 
-`wangEditor`
+wangEditor
 
 ```
 
@@ -76,7 +76,7 @@ npm run dev
 
 [✖] 文章点赞
 
-
+![首页访问登录]('./static//bmob-1.gif)
 
 2018 - 1 - 21
 

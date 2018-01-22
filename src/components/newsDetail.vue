@@ -23,9 +23,9 @@
                 <span>1</span>
             </li>
 
-            <li>
+            <li @click="addNewGood">
                 <i class="fa fa-thumbs-o-up"></i>
-                <span>1</span>
+                <span>{{newGood || 0}}</span>
             </li>
 
             <li>
@@ -82,7 +82,8 @@ export default {
             'newConent',
             'newComment',
             'newTime',
-            'newTag'
+            'newTag',
+            'newGood'
         ])
     },
     methods: {
@@ -101,6 +102,9 @@ export default {
             var dqDate = year+'-'+month+'-'+day+" "+hours+':'+mins+':'+sec
             this.$store.dispatch('setComment',[this.$refs.comment.value,dqDate])
             this.$refs.comment.value = ''
+        },
+        addNewGood: function(){
+            this.$store.dispatch('addNewGood')
         }
     }
 }
