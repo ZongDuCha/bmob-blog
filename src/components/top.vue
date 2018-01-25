@@ -22,9 +22,36 @@
           <p v-if="name">
               <a>{{name}}</a> 
               <a @click="cleanlocal">退出</a>
+              <a>发表文章</a>
             </p>
           <p v-if="!name" onclick="window.location.reload()"><a>去登录</a></p>
           <p>梦想还是要有的，万一实现了呢</p>
+      </div>
+  </div>
+
+  <div class="pushNews pushNewsAni">
+      <div class="push-container">
+          <i class="fa fa-close fa-2x"></i>
+
+          <div class="opacmod">
+            <input type="text" placeholder="标题" ref="modTitle">
+            <div id="pushedi" style="text-align:left"></div>
+            <div class="operation">
+                <label 
+                    :for="item.value" 
+                    v-for="(item,index) in pushTag"
+                    :key="index">
+                    <input type="checkbox"
+                    :id="item.value"
+                    @click="pushTagState(item.value,$event)"
+                    :value="item.value">
+                    {{item.value}}
+                    </label>
+
+                <button>清空内容</button>
+                <button >确定修改</button>
+            </div>
+          </div>
       </div>
   </div>
 </div>
@@ -32,6 +59,7 @@
 
 <script>
 import store from 'vuex'
+import E from 'wangeditor'
 export default {
     name: 'top',
     data(){
@@ -39,18 +67,111 @@ export default {
             // 控制小屏下的侧边导航栏
             left: false,
             name: localStorage.getItem('name'),
-            nameImg: ''
+            nameImg: '',
+            tagState: [],
+            pushTag:[
+                {
+                    value:'Javascript'
+                },{
+                    value:'Webpack'
+                },{
+                    value:'Sass'
+                },{
+                    value:'Nodejs'
+                },{
+                    value:'Vue'
+                }
+            ]
         }
     },
     methods:{
         cleanlocal:function(){
             this.$store.commit('cleanlocal')
+        },
+        pushTagState:function(value,e){
+            var is = this.tagState.includes(value)
+            if(is){
+                var of = this.tagState.indexOf(value)
+                this.tagState.splice(of,of+1)
+            }else{
+                this.tagState.push(value)
+            }
+            e.stopPropagation()
         }
+    },
+    mounted(){
+        var editor = new E('#pushedi')
+        editor.create()
+        editor.txt.html('请输入内容')
     }
 }
 </script>
 
 <style lang='scss'>
+.pushNews{
+    position: relative;transition:.4s;
+    position: fixed;bottom:0;left:0;right:0;margin:auto;
+    width:0%;height:0%;opacity: 0;z-index:99;
+    background:rgba(23, 21, 21, 0.74);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+
+    .push-container{
+        position: relative;
+        border-radius: 5px;
+        position: absolute;
+        top: 0;overflow-y: auto;
+        bottom: 0;
+        right: 0;
+        left: 0;box-sizing:border-box;padding:15px;
+        margin: auto;
+        max-width:100%;max-height:100%;
+        background:#fff;
+        width:80%;height:80%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+        *{
+            color:#353535;
+        }
+
+        .fa-close{
+            cursor: pointer;
+            transition:.3s;
+            position: absolute;
+            right: 15px;
+            top: 10px;color:rgb(73, 73, 73);
+            z-index:9;
+            &:hover{
+                color:#ff0000;
+            }
+        }
+
+        .operation{
+            label{
+                display:flex;text-align:left;float: left;margin-right:10px;
+                margin-top:5px;
+
+                input{
+                        height: 18px;
+                        width: 18px;
+                        margin-top: 2px;
+                        margin-right: 3px;
+                }
+            }
+        }
+
+    }
+}
+.pushNewsAni{
+    width:100%;height:100%;opacity:1 !important;
+}
 .tag{
     color:#000;
     text-align: center;

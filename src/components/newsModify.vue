@@ -4,7 +4,7 @@
         <i class="fa fa-close fa-2x" @click="newModClose($event)"></i>
           <div class="news-title">
             <img src="../assets/logonameimg.png" alt="">
-            <h2>你猜</h2>
+            <h2>{{editorTitle}}</h2>
         </div>
           
           <div class="opacmod">

@@ -59,7 +59,7 @@ const mutations = {
         NProgress.done()
     },
     login: () => {
-        Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
+        Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
