@@ -36,6 +36,11 @@ const state = {
     newModShow : false,
     newModTitle : '',
     newModContent : '',
+    /**
+     * top
+     * pushShow        发布文章标题
+     */
+    pushShow: false,
     // about
     aboutContent: '',
     aboutID: '',
@@ -59,7 +64,7 @@ const mutations = {
         NProgress.done()
     },
     login: () => {
-        Bmob.initialize('17150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
+        Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
@@ -165,6 +170,7 @@ const mutations = {
             var query = new Bmob.Query(news);
             query.get(type, {
             success: function(result) {
+                result = result.reverse()
                 state.newShow = true
                 state.newID = result.id;
                 state.newTitle = result.get("title");
@@ -346,6 +352,48 @@ const mutations = {
                 state.mesState='err';state.mesTitle='错误'
             }
         });
+    },
+    /**
+     * top
+     * pushShow        发布文章遮罩
+     */
+    pushNews: (state,type) => {
+        state.mesState= '';state.mesTitle = '';
+        console.log(type[0] == '')
+        console.log(type[1] == '')
+        if(type[0] == '' && type[1] == ''){
+            state.mesState= 'err';
+            state.mesTitle = '标题或内容不得为空'; 
+            return;
+        }
+        console.log(type)
+        var Diary = Bmob.Object.extend("news");
+        var diary = new Diary();
+        diary.set("title",type[0]);
+        diary.set("content",type[1]);
+        diary.set("newTag",type[2]);
+        diary.save(null, {
+        success: function(result) {
+            if(!result) return
+            state.mesState= 'suc';state.mesTitle = '发布成功';
+            state.pushShow = false
+            state.newTitle = result.get("title");
+            state.newComent = result.get("content");
+            state.newComment = result.get("comment").reverse();
+            state.newTime = result.createdAt;
+            state.newTag = result.get('newTag');
+            state.newGood = result.get('newGood')
+        },
+        error: function(result, error) {
+            state.mesState= 'err';state.mesTitle = '发布失败';
+        }
+        });
+    },
+    addShow:function(state){
+        state.pushShow = true
+    },
+    cloShow:function(state){
+        state.pushShow = false
     }
 }
 
@@ -396,6 +444,10 @@ const actions = {
         
         commit('login')
         commit('setAboutCont',type)
+    },
+    pushNews: ({commit},type,state) => {
+        commit('login')
+        commit('pushNews',type)
     }
 }
 

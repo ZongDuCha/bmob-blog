@@ -22,34 +22,35 @@
           <p v-if="name">
               <a>{{name}}</a> 
               <a @click="cleanlocal">退出</a>
-              <a>发表文章</a>
+              <a @click="addShow">发表文章</a>
             </p>
           <p v-if="!name" onclick="window.location.reload()"><a>去登录</a></p>
           <p>梦想还是要有的，万一实现了呢</p>
       </div>
   </div>
 
-  <div class="pushNews pushNewsAni">
+  <div class="pushNews" :class="pushShow ? 'pushNewsAni' : ''"  @click='newModClose($event)'>
       <div class="push-container">
-          <i class="fa fa-close fa-2x"></i>
+          <i class="fa fa-close fa-2x" @click='newModClose($event)'></i>
 
           <div class="opacmod">
-            <input type="text" placeholder="标题" ref="modTitle">
+            <input type="text" placeholder="标题" ref="" v-model="pushTitle">
             <div id="pushedi" style="text-align:left"></div>
             <div class="operation">
+                <p>文章文类：</p>
                 <label 
                     :for="item.value" 
                     v-for="(item,index) in pushTag"
                     :key="index">
                     <input type="checkbox"
                     :id="item.value"
-                    @click="pushTagState(item.value,$event)"
+                    @click="addTagState(item.value,$event)"
                     :value="item.value">
                     {{item.value}}
                     </label>
 
                 <button>清空内容</button>
-                <button >确定修改</button>
+                <button @click="addNews">确定修改</button>
             </div>
           </div>
       </div>
@@ -58,7 +59,7 @@
 </template>
 
 <script>
-import store from 'vuex'
+import { store,mapState } from 'vuex'
 import E from 'wangeditor'
 export default {
     name: 'top',
@@ -68,6 +69,8 @@ export default {
             left: false,
             name: localStorage.getItem('name'),
             nameImg: '',
+            pushTitle:'',
+            pushCont: '',
             tagState: [],
             pushTag:[
                 {
@@ -84,11 +87,25 @@ export default {
             ]
         }
     },
+    computed:{
+        ...mapState([
+            'pushShow'
+        ])
+    },
     methods:{
         cleanlocal:function(){
             this.$store.commit('cleanlocal')
         },
-        pushTagState:function(value,e){
+        addShow:function(){
+            this.$store.commit('addShow')
+        },
+        //关闭显示
+        newModClose: function(e){
+            if(e.target.className != 'pushNews pushNewsAni' && e.target.className != 'fa fa-close fa-2x') return
+            this.$store.commit('cloShow')
+        },
+        // 文章分类
+        addTagState:function(value,e){
             var is = this.tagState.includes(value)
             if(is){
                 var of = this.tagState.indexOf(value)
@@ -97,12 +114,19 @@ export default {
                 this.tagState.push(value)
             }
             e.stopPropagation()
+        },
+        // 发布
+        addNews:function(){
+            this.$store.dispatch('pushNews',[this.pushTitle,this.pushCont,this.tagState])
         }
     },
     mounted(){
-        var editor = new E('#pushedi')
-        editor.create()
-        editor.txt.html('请输入内容')
+        var editor1 = new E('#pushedi')
+        editor1.customConfig.onchange = (html) => {
+            this.pushCont = html
+        }
+        editor1.create()
+        editor1.txt.html('请输入内容')
     }
 }
 </script>
@@ -154,6 +178,13 @@ export default {
         }
 
         .operation{
+            p{
+                display: inline-block;
+                float: left;
+                margin-top: 5px;
+                color: $color;
+                font-weight: 900;
+            }
             label{
                 display:flex;text-align:left;float: left;margin-right:10px;
                 margin-top:5px;
