@@ -17,7 +17,8 @@ const state = {
         @newComment     文章评论
         @newTime        文章发表时间
         @newTag         文章分类
-        @newGood
+        @newGood        文章赞
+        @newName        文章发表人
     */
     newID : '',
     newShow : false,
@@ -27,6 +28,7 @@ const state = {
     newTime: '',
     newTag: '',
     newGood: '',
+    newName: '',
     /**
      *  newModID           编辑文章ID
      *  newModTitle        编辑文章标题
@@ -66,12 +68,18 @@ const mutations = {
     login: () => {
         Bmob.initialize('7150849514c91ed37625710a29c91139','243c886d51cc5d468ccef730afe00cba');
     },
+    // 重置提示框
+    resetMes:function(state){
+        state.mesState= ''; state.mesTitle = '';
+        if(state.mesState != '' && state.mesTitle != state.mesTitle) state.mesState= ''; state.mesTitle = '';
+    },
     // content 首页文章 （查询所有数据）
     getallState : (state,type) => {
         var GameScore = Bmob.Object.extend(type.tabName);
         var query = new Bmob.Query(GameScore);
         type.getlist ? query.limit(6*type.getlist) : ''
         type.className != '全部' ? query.equalTo('newTag',type.className) : ''
+        query.descending('createdAt')
         query.find({
             success: results => {
                 state.getCont = results
@@ -83,7 +91,6 @@ const mutations = {
     },
     // login 登录 (查询单条数据)
     inStats:(state,type) => {
-        state.mesState = state.mesTitle = ''
         var GameScore = Bmob.Object.extend('user_name');
         var query = new Bmob.Query(GameScore);
         // 值存在就执行条件
@@ -121,7 +128,6 @@ const mutations = {
     // login 注册 （添加单条数据)
     signUp:(state,type) => {
         if(type){
-            state.mesState = state.mesTitle = ''
             var Diary = Bmob.Object.extend("user_name");
             var diary = new Diary();
             diary.set("name",type.upUser)
@@ -164,21 +170,25 @@ const mutations = {
             @newTime        文章发表时间
             @newTag         文章分类
             @newGood        文章点攒数
+            @newName        文章发表人
         */
             NProgress.start()
             var news = Bmob.Object.extend("news");
             var query = new Bmob.Query(news);
             query.get(type, {
             success: function(result) {
-                result = result.reverse()
+                console.log(result)
                 state.newShow = true
                 state.newID = result.id;
                 state.newTitle = result.get("title");
                 state.newComent = result.get("content");
-                state.newComment = result.get("comment").reverse();
+                // Array.prototype.reverse.call(result.get("comment")) 
+                state.newComment = result.get("comment") ? Array.prototype.reverse.call(result.get("comment")) : []
                 state.newTime = result.createdAt;
                 state.newTag = result.get('newTag');
                 state.newGood = result.get('newGood')
+                state.newName = result.attributes.newName
+                console.log(state.newName)
                 NProgress.done()
             },
             error: function(object, error) {
@@ -189,7 +199,6 @@ const mutations = {
     },
     // newsDetail 评论
     setComment: (state,type) => {
-        state.mesState = state.mesTitle =  '';
         if (!type[0]) alert('不能为空');
         if(!state.loginBJ){
             state.mesState = 'err',
@@ -230,7 +239,6 @@ const mutations = {
     editMod: (state,type) => {
         if (!state.newModId) state.mesState='err';state.mesTitle='错误'
         NProgress.start()
-        state.mesState = state.mesTitle = '';
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
         query.get(state.newModId, {
@@ -272,7 +280,13 @@ const mutations = {
     newModClose: (state) => {
         state.newModShow = false
     },
+    // 修改文章
     newModShow: (state,type) => {
+        if(type[3] != localStorage.getItem('name')){
+            state.mesState = 'err',state.mesTitle = '无权限修改'
+            console.log(state.mesState,state.mesTitle)
+            return false;
+        }
         state.newModId = type[0]
         state.newModTitle = type[1]
         state.newModContent = type[2]
@@ -282,13 +296,18 @@ const mutations = {
     clearNewMod: (state) => {
         state.newModContent = ' '
     },
+    // 删除文章
     removeNew: (state,type) => {
-        if (!type) return
+        if(state.mesState != '' && state.mesTitle != state.mesTitle) state.mesState= ''; state.mesTitle = '';
+        if(type[1] != localStorage.getItem('name')){
+            state.mesState = 'err',state.mesTitle = '无权限删除'
+            console.log(state.mesState,state.mesTitle)
+            return false;
+        }
         NProgress.start()
-        state.mesState = state.mesTitle = '';
         var Diary = Bmob.Object.extend("news");
         var query = new Bmob.Query(Diary);
-        query.get(type, {
+        query.get(type[0], {
           success: function(object) {
             // The object was retrieved successfully.
             object.destroy({
@@ -338,7 +357,6 @@ const mutations = {
     },
     // 修改about
     setAboutCont: (state,type) => {
-        state.mesState= '';state.mesTitle = '';
         var Diary = Bmob.Object.extend("about");
         var query = new Bmob.Query(Diary);
         query.get(state.aboutID, {
@@ -358,9 +376,6 @@ const mutations = {
      * pushShow        发布文章遮罩
      */
     pushNews: (state,type) => {
-        state.mesState= '';state.mesTitle = '';
-        console.log(type[0] == '')
-        console.log(type[1] == '')
         if(type[0] == '' && type[1] == ''){
             state.mesState= 'err';
             state.mesTitle = '标题或内容不得为空'; 
@@ -372,17 +387,13 @@ const mutations = {
         diary.set("title",type[0]);
         diary.set("content",type[1]);
         diary.set("newTag",type[2]);
+        diary.set("newName",localStorage.getItem('name'));
         diary.save(null, {
         success: function(result) {
             if(!result) return
             state.mesState= 'suc';state.mesTitle = '发布成功';
             state.pushShow = false
-            state.newTitle = result.get("title");
-            state.newComent = result.get("content");
-            state.newComment = result.get("comment").reverse();
-            state.newTime = result.createdAt;
-            state.newTag = result.get('newTag');
-            state.newGood = result.get('newGood')
+            state.getCont.unshift(result)
         },
         error: function(result, error) {
             state.mesState= 'err';state.mesTitle = '发布失败';
@@ -399,53 +410,68 @@ const mutations = {
 
 const actions = {
     getallState : ({commit},type) => {
+        commit('resetMes')
         commit('login')
         commit('getallState',type)
     },
     inStats: ({commit},type) => {
+        commit('resetMes')
         commit('login')
         commit('inStats',type)
     },
     signUp: ({commit},type) => {
+        commit('resetMes')
         commit('login')
         commit('signUp',type)
     },
     // 获取文章信息
     getNews: ({commit},type) => {
+        commit('resetMes')
         commit('login')
         commit('getNews',type)
     },
     setComment: ({commit},type) => {
+        commit('resetMes')
         commit('setComment',type)
+    },
+    newModShow:({commit},type) => {
+        commit('resetMes')
+        commit('newModShow',type)
     },
     // 文章点赞
     addNewGood: ({commit}) => {
+        commit('resetMes')
         commit('login')
         commit('addNewGood')
     },
     // 编辑文章
     editMod: ({commit},type) => {
+        commit('resetMes')
         commit('login')
         commit('editMod',type)
     },
     newModShow: ({commit},type) => {
+        commit('resetMes')
         commit('newModShow',type)
     },
     // 删除文章
     removeNew: ({commit},type) => {
+        commit('resetMes')
         commit('removeNew',type)
     },
     getAboutCont: ({commit}) => {
+        commit('resetMes')
         commit('login')
         commit('getAboutCont')
     },
     // 修改about内容
     setAboutCont: ({commit},type,state) => {
-        
+        commit('resetMes')
         commit('login')
         commit('setAboutCont',type)
     },
     pushNews: ({commit},type,state) => {
+        commit('resetMes')
         commit('login')
         commit('pushNews',type)
     }

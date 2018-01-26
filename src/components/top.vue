@@ -118,6 +118,21 @@ export default {
         // 发布
         addNews:function(){
             this.$store.dispatch('pushNews',[this.pushTitle,this.pushCont,this.tagState])
+            if(this.pushShow){
+                this.pushTitle = this.pushCont = '';this.tagState = [];
+                var editor1 = new E('#pushedi')
+                editor1.customConfig.onchange = (html) => {
+                    this.pushCont = html
+                }
+                editor1.create()
+                editor1.txt.html('请输入内容')
+
+                // 全部不选
+                var _check = document.querySelectorAll('.operation label input')
+                for(let i in _check.length){
+                    _check[i].checked = false
+                }
+            }
         }
     },
     mounted(){

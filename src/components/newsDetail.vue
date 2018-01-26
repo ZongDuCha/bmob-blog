@@ -6,14 +6,10 @@
         <i class="fa fa-close fa-2x" @click="newClose($event)"></i>
         <div class="news-title">
             <img src="../assets/logonameimg.png" alt="">
-            <h2>{{newTitle}}</h2>
+            <h2>{{newName}}</h2>
         </div>
 
         <div class="operation">
-            <li>
-                <i class="fa fa-tags"></i>
-                <span v-for="(item,index) in newTag" :key="index">{{item}}</span>
-            </li>
             <li>
                 <i class="fa fa-calendar"></i>
                 <span>{{newTime}}</span>
@@ -37,7 +33,7 @@
 
         <div class="overy">
             <section>
-            {{newConent}}123123123123
+            {{newConent}}
             </section>
 
             <!-- 评论 -->
@@ -83,7 +79,8 @@ export default {
             'newComment',
             'newTime',
             'newTag',
-            'newGood'
+            'newGood',
+            'newName'
         ])
     },
     methods: {
