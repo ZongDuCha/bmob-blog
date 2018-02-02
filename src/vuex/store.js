@@ -127,29 +127,30 @@ const mutations = {
     },
     // login 注册 （添加单条数据)
     signUp:(state,type) => {
-        if(type){
-            var Diary = Bmob.Object.extend("user_name");
-            var diary = new Diary();
-            diary.set("name",type.upUser)
-            diary.set("password",type.upPass)
-            diary.save(null, {
-                success: function(result) {
-                    if(result.id && type.upUser && type.upPass){
-                        NProgress.start()
-                        state.mesState='suc',state.mesTitle = '注册成功'
-                        console.log("创建成功")
-                        NProgress.done()
-                    }else{
-                        state.mesState='err',state.mesTitle = '注册失败'
-                        console.log('失败');
-                    }
-                },
-                error: function(result, error) {
-                    state.mesState='err',state.mesTitle = '注册失败'
-                    console.log('创建日记失败');
-                }
-            });
+        if(type.upUser == '' || type.upPass == ''){
+           setTimeout(() =>  state.mesState='err',state.mesTitle = '帐号或密码不能为空！');
+           return false;
         }
+        var Diary = Bmob.Object.extend("user_name");
+        var diary = new Diary();
+        diary.set("name",type.upUser)
+        diary.set("password",type.upPass)
+        diary.save(null, {
+            success: function(result) {
+                console.log(result)
+                if(result.id && type.upUser && type.upPass){
+                    NProgress.start()
+                    state.mesState='suc',state.mesTitle = '注册成功'
+                    console.log("创建成功")
+                    NProgress.done()
+                }else{
+                    state.mesState='err',state.mesTitle = '帐号已存在'
+                }
+            },
+            error: function(result, error) {
+                state.mesState='err',state.mesTitle = '帐号已存在'
+            }
+        });
     },
     // login 随便看看
     skip: (state) => {
@@ -281,7 +282,7 @@ const mutations = {
     // 修改文章
     newModShow: (state,type) => {
         if(type[3] != localStorage.getItem('name')){
-            state.mesState = 'err',state.mesTitle = '无权限修改'
+            setTimeout(() => state.mesState = 'err',state.mesTitle = '无权限修改');
             return false;
         }
         state.newModId = type[0]
@@ -297,7 +298,7 @@ const mutations = {
     removeNew: (state,type) => {
         if(state.mesState != '' && state.mesTitle != state.mesTitle) state.mesState= ''; state.mesTitle = '';
         if(type[1] != localStorage.getItem('name')){
-            state.mesState = 'err',state.mesTitle = '无权限删除'
+            setTimeout(() => state.mesState = 'err',state.mesTitle = '无权限删除');
             return false;
         }
         NProgress.start()
