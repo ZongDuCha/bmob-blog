@@ -5,6 +5,8 @@ import NProgress from 'nprogress'
 Vue.use(Vuex)
 
 const state = {
+    // localStorage
+    locaName: localStorage.getItem('name'),
     // message 数据
     mesState: '',
     mesTitle: '',
@@ -108,6 +110,7 @@ const mutations = {
                     state.mesState = 'suc'
                     localStorage.setItem('name',results[0].attributes.name)
                     state.mesTitle = `${results[0].attributes.name} , 欢迎您!`
+                    state.locaName=localStorage.getItem('name')
                     NProgress.done()
                 }
 
@@ -199,11 +202,10 @@ const mutations = {
     // newsDetail 评论
     setComment: (state,type) => {
         if (!type[0]) alert('不能为空');
-        if(!state.loginBJ){
-            state.mesState = 'err',
-            state.mesTitle="未登录";
-            state.loginBJ=true;
-            setTimeout(function(){location.reload(false)},2000);
+        if(!state.locaName){
+            setTimeout(() => state.mesState = 'err',state.mesTitle="未登录,转至登录页")
+            setTimeout(() => location.reload(false),2000);
+            return false;
         }
         NProgress.start()
         var Diary = Bmob.Object.extend("news");
@@ -211,7 +213,7 @@ const mutations = {
         query.get(state.newID, {
             success: function(result) {
                 var obj  = {
-                    "name": localStorage.getItem('name'),
+                    "name": state.locaName,
                     "time": type[1],
                     "content": type[0]
                 }
@@ -281,7 +283,7 @@ const mutations = {
     },
     // 修改文章
     newModShow: (state,type) => {
-        if(type[3] != localStorage.getItem('name')){
+        if(type[3] != state.locaName){
             setTimeout(() => state.mesState = 'err',state.mesTitle = '无权限修改');
             return false;
         }
@@ -297,7 +299,7 @@ const mutations = {
     // 删除文章
     removeNew: (state,type) => {
         if(state.mesState != '' && state.mesTitle != state.mesTitle) state.mesState= ''; state.mesTitle = '';
-        if(type[1] != localStorage.getItem('name')){
+        if(type[1] != state.locaName){
             setTimeout(() => state.mesState = 'err',state.mesTitle = '无权限删除');
             return false;
         }
@@ -384,7 +386,7 @@ const mutations = {
         diary.set("title",type[0]);
         diary.set("content",type[1]);
         diary.set("newTag",type[2]);
-        diary.set("newName",localStorage.getItem('name'));
+        diary.set("newName",state.locaName);
         diary.save(null, {
         success: function(result) {
             if(!result) return
