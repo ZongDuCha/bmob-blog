@@ -32,8 +32,7 @@
 
 
         <div class="overy">
-            <section>
-            {{newConent}}
+            <section v-html="newConent">
             </section>
 
             <!-- 评论 -->

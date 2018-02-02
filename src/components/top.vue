@@ -49,7 +49,7 @@
                     {{item.value}}
                     </label>
 
-                <button>清空内容</button>
+                <button @click="delCont">清空</button>
                 <button @click="addNews">确定修改</button>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default {
             tagState: [],
             pushTag:[
                 {
-                    value:'Javascript'
+                    value:'JavaScript'
                 },{
                     value:'Webpack'
                 },{
@@ -115,6 +115,23 @@ export default {
             }
             e.stopPropagation()
         },
+        // 清空内容
+        delCont:function(){
+            var _check = document.querySelectorAll('.operation label input')
+            for(let i = 0;i<_check.length;i++){
+                _check[i].checked = false
+            }
+
+            this.pushTitle = this.pushCont = '';this.tagState = [];
+            var editor1 = new E('#pushedi')
+            editor1.customConfig.onchange = (html) => {
+                this.pushCont = html
+            }
+            editor1.create()
+            editor1.txt.html('请输入内容')
+            // 全部不选
+            
+        },
         // 发布
         addNews:function(){
             this.$store.dispatch('pushNews',[this.pushTitle,this.pushCont,this.tagState])
@@ -129,7 +146,7 @@ export default {
 
                 // 全部不选
                 var _check = document.querySelectorAll('.operation label input')
-                for(let i in _check.length){
+                for(let i = 0;i<_check.length;i++){
                     _check[i].checked = false
                 }
             }

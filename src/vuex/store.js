@@ -23,7 +23,7 @@ const state = {
     newID : '',
     newShow : false,
     newTitle: '',
-    newContent: '',
+    newConent: '',
     newComment: '',
     newTime: '',
     newTag: '',
@@ -177,18 +177,16 @@ const mutations = {
             var query = new Bmob.Query(news);
             query.get(type, {
             success: function(result) {
-                console.log(result)
                 state.newShow = true
                 state.newID = result.id;
                 state.newTitle = result.get("title");
-                state.newComent = result.get("content");
+                state.newConent = result.get("content");
                 // Array.prototype.reverse.call(result.get("comment")) 
                 state.newComment = result.get("comment") ? Array.prototype.reverse.call(result.get("comment")) : []
                 state.newTime = result.createdAt;
                 state.newTag = result.get('newTag');
                 state.newGood = result.get('newGood')
                 state.newName = result.attributes.newName
-                console.log(state.newName)
                 NProgress.done()
             },
             error: function(object, error) {
@@ -284,7 +282,6 @@ const mutations = {
     newModShow: (state,type) => {
         if(type[3] != localStorage.getItem('name')){
             state.mesState = 'err',state.mesTitle = '无权限修改'
-            console.log(state.mesState,state.mesTitle)
             return false;
         }
         state.newModId = type[0]
@@ -301,7 +298,6 @@ const mutations = {
         if(state.mesState != '' && state.mesTitle != state.mesTitle) state.mesState= ''; state.mesTitle = '';
         if(type[1] != localStorage.getItem('name')){
             state.mesState = 'err',state.mesTitle = '无权限删除'
-            console.log(state.mesState,state.mesTitle)
             return false;
         }
         NProgress.start()
