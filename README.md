@@ -37,7 +37,7 @@ wangEditor
 
 ```
 
-完成项
+### 主要实现的功能
 
 [✔] 登录帐号 (保存至localStorage)
 
