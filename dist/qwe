@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1">
+
+  <!-- x5内核浏览器(微信,QQ浏览器)强制竖屏 -->
+  <meta name="x5-orientation" content="portrait">
+
+  <!-- 去掉移动web页面自动探测电话号码 -->
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="x-rim-auto-match" content="none">
+
+  <title>小强erp导游报账</title>
+</head>
+<body>
+  <input type="file" capture="video" id="id" @change="selFile" ref="selInput">
+</body>
+</html>
