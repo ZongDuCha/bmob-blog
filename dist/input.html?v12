@@ -18,6 +18,6 @@
   <input type="file" capture="camera" multiple=""/>
 </body>
   <script>
-    alert(1113)
+    alert(413)
     </script>
 </html>
