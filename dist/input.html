@@ -20,6 +20,12 @@
   1
 </body>
   <script>
-
+alerts(navigator.mediaDevices.getUserMedia(constraints)
+.then(function(stream) {
+  /* 使用这个stream stream */
+})
+.catch(function(err) {
+  /* 处理error */
+});)
     </script>
 </html>
