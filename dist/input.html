@@ -16,16 +16,12 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 </head>
 <body>
-<input type="file" multiple=‘’>
+<input type="file" id='inp' multiple=‘’>
+  <lable for="inp">123123123123123</lable>
   23
-  <span class="selinput">选择</span>
+  
 </body>
   <script>
-document.querySelector('.selinput').onclick = function(){
-  WeixinJSBridge.invoke('imagePreview',{
-           'current' : '',
-           'urls' : ''
-  })
-}
+
     </script>
 </html>
