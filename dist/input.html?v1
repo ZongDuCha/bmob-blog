@@ -22,7 +22,10 @@
 </body>
   <script>
 document.querySelector('.selinput').onclick = function(){
-  alert(123)
+  WeixinJSBridge.invoke(‘imagePreview‘,{
+           'current' : curSrc,
+           'urls' : srcList
+}）;
 }
     </script>
 </html>
