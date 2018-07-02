@@ -4,9 +4,21 @@
 <head>
   <meta charset="utf-8">
 </head>
+ <style>
+ .grid{ 
+    border: 1px solid #000;     width: 350px;    margin: 0 auto;     display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;     grid-template-rows: 50px 50px 50px 50px; 
+} 
+
+ </style>
 <body>
 <input type="file" id='inp' multiple accept="image/*" capture='camera'>
   2222
+ <div class="grid">
+    <div class="grid-list">1</div>    
+    <div class="grid-list">2</div>    
+    <div class="grid-list">3</div> 
+ </div>
 </body>
   <script>
 
