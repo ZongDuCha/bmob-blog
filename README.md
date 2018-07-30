@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-在线演示地址：[https://zongducha.github.io/bmob-blog/dist/index.html#/](http://www.zongdusir.top/bmob-blog/dist/index.html#/)
+在线演示地址：[https://zongducha.github.io/bmob-blog/dist/index.html#/](https://zongducha.github.io/bmob-blog/dist/index.html#/)
 
 ```
 ## Maybe you need these
